@@ -1,0 +1,27 @@
+---
+
+- name: Install curl
+  dnf:
+    name:
+      - curl
+      - conntrack
+    state: latest
+
+- name: Get /usr/local/bin/kubectl stat
+  stat:
+    path: /usr/local/bin/kubectl
+  register: _kubectl_path
+
+- name: Download kubectl
+  get_url:
+    url: https://storage.googleapis.com/kubernetes-release/release/{{_k8s_ver.stdout}}/bin/linux/amd64/kubectl
+    dest: /usr/local/bin/kubectl
+    mode: 0755
+  when: not _kubectl_path.stat.exists
+
+- name: check kubectl version
+  shell: kubectl version --client
+  register: _kubectl
+
+- debug:
+    var: _kubectl.stdout

@@ -1,0 +1,30 @@
+---
+
+- include_role:
+    name: pre-setup
+
+- name: Install Additional packages
+  dnf:
+    name:
+      - socat
+      - tc
+    state: installed
+
+- name: Get stat of /usr/local/bin/minikube
+  stat:
+    path: /usr/local/bin/minikube
+  register: _mkube_file
+
+- name: Download minikube
+  get_url:
+    url: https://storage.googleapis.com/minikube/releases/latest/minikube-linux-amd64
+    dest: /usr/local/bin/minikube
+    mode: '0700'
+  when: not _mkube_file.stat.exists
+
+- name: Check minikube version
+  shell: minikube version
+  register: _mkube_version
+
+- debug:
+    var: _mkube_version.stdout_lines

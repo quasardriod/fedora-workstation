@@ -1,0 +1,12 @@
+---
+
+- name: Install rsyslog
+  dnf:
+    name: rsyslog
+    state: latest
+
+- name: Start rsyslog
+  systemd:
+    name: rsyslog
+    state: started
+    enabled: yes
