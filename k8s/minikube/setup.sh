@@ -73,14 +73,26 @@ build_image(){
         cd $app_dir
         $CON_ENGINE build -f Dockerfile -t $app_image .
       elif [ "$choice" == "n" ] || [ "$choice" == "N" ] || [ -z "$choice" ];then
-        echo "Good. Application will be deployed using existing $app_image image!" && exit 0
+        echo "Good. Application will be deployed using existing $app_image image!"
       else
         echo "Wrong choice" && exit 1
       fi
     fi
 }
 
-pod_testing(){
+deploy_app_k8s(){
+  # this function needs two args
+  # $1 - Application dir contains dockerfile and code
+  app_dir=$1
+  echo
+  echo "Applying config in kubernetes..."
+  echo
+  cd $app_dir/kubernetes
+  kubectl apply -f deployment.yaml
+  kubectl get pods
+}
+
+run_application(){
   echo
   echo "Applications avaiable to test..."
   echo "
@@ -92,10 +104,11 @@ pod_testing(){
   read -p "Select option: " choice
   if [ "$choice" == "1" ];then
     build_image $PYTHON_APP_DIR/app $PYTHON_IMAGE
+    deploy_app_k8s $PYTHON_APP_DIR
   fi
 }
 
-help(){
+usages(){
 	echo
   echo " -a Install Ansible"
   echo " -d Install Docker Engine"
@@ -108,14 +121,14 @@ help(){
 }
 
 
-while getopts 'adhmpt' opt; do
+while getopts 'adhmrt' opt; do
   case $opt in
     a) install_ansible;;
     d) install_docker;;
-    h) help;;
+    h) usages;;
     m) install_minikube;;
-    p) pod_testing;;
+    r) run_application;;
     t) k8s_tools;;
-    \?|*) echo "Invalid Option: -$OPTARG" && usage;;
+    \?|*) echo "Invalid Option: -$OPTARG" && usages;;
   esac
 done
