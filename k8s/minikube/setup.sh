@@ -105,7 +105,14 @@ run_application(){
   if [ "$choice" == "1" ];then
     build_image $PYTHON_APP_DIR/app $PYTHON_IMAGE
     deploy_app_k8s $PYTHON_APP_DIR
+  elif [ "$choice" == "2" ];then
+    echo "TODO..."
+  elif [ "$choice" == "3" ];then
+    echo "TODO..."
+  else
+    echo "Wrong choice..." && exit 1
   fi
+
 }
 
 usages(){
