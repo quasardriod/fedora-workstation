@@ -1,0 +1,38 @@
+- hosts: localhost
+  gather_facts: true
+
+  pre_tasks:
+  - name: Validate OS
+    assert:
+      that:
+        - ansible_os_family is match('RedHat')
+      fail_msg: "Not a valid CentOS or RedHat OS"
+    tags:
+      - always
+
+
+  - name: Get latest k8s version
+    shell: curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt
+    register: _k8s_ver
+    tags:
+      - always
+      - k8s-version
+  - debug:
+      msg: "Current Kubernetes version: {{_k8s_ver.stdout}}"
+    tags:
+      - always
+      - k8s-version
+
+  roles:
+  - role: docker
+    tags:
+      - docker
+
+  - role: k8s-tools
+    tags:
+      - k8s-tools
+      - kubectl
+
+  - role: minikube
+    tags:
+      - minikube
