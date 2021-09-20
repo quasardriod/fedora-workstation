@@ -30,6 +30,6 @@
     var: _mkube_version.stdout_lines
 
 - name: Set selinux in permissive mode
-  ansible.posix.selinux:
+  selinux:
     policy: targeted
     state: permissive
