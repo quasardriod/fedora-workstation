@@ -1,0 +1,42 @@
+connection.id:                          bridge-slave-enp4s0f3u1u4
+connection.uuid:                        80ad458d-44c0-4942-aca7-4912b31862be
+connection.stable-id:                   --
+connection.type:                        802-3-ethernet
+connection.interface-name:              enp4s0f3u1u4
+connection.autoconnect:                 yes
+connection.autoconnect-priority:        0
+connection.autoconnect-retries:         -1 (default)
+connection.multi-connect:               0 (default)
+connection.auth-retries:                -1
+connection.timestamp:                   0
+connection.read-only:                   no
+connection.permissions:                 --
+connection.zone:                        --
+connection.master:                      br0
+connection.slave-type:                  bridge
+connection.autoconnect-slaves:          -1 (default)
+connection.secondaries:                 --
+connection.gateway-ping-timeout:        0
+connection.metered:                     unknown
+connection.lldp:                        default
+connection.mdns:                        -1 (default)
+connection.llmnr:                       -1 (default)
+connection.wait-device-timeout:         -1
+802-3-ethernet.port:                    --
+802-3-ethernet.speed:                   0
+802-3-ethernet.duplex:                  --
+802-3-ethernet.auto-negotiate:          no
+802-3-ethernet.mac-address:             --
+802-3-ethernet.cloned-mac-address:      --
+802-3-ethernet.generate-mac-address-mask:--
+802-3-ethernet.mac-address-blacklist:   --
+802-3-ethernet.mtu:                     auto
+802-3-ethernet.s390-subchannels:        --
+802-3-ethernet.s390-nettype:            --
+802-3-ethernet.s390-options:            --
+802-3-ethernet.wake-on-lan:             default
+802-3-ethernet.wake-on-lan-password:    --
+bridge-port.priority:                   32
+bridge-port.path-cost:                  100
+bridge-port.hairpin-mode:               no
+bridge-port.vlans:                      --
