@@ -1,0 +1,24 @@
+---
+
+- hosts: packstack
+  gather_facts: true
+
+  vars:
+    openstack_repo: centos-release-openstack-victoria
+
+  pre_tasks:
+  - assert:
+      that:
+        - ansible_distribution is match('CentOS')
+        - ansible_distribution_major_version == "8"
+      fail_msg: "Target System must be CentOS 8"
+
+  roles:
+  - role: pre-setup
+    tags:
+      - pre-setup
+
+  - role: install-openstack
+    tags:
+      - install-openstack
+      - openstack

@@ -1,0 +1,4 @@
+- name: Install packstack package
+  dnf:
+    name: openstack-packstack
+    state: present
