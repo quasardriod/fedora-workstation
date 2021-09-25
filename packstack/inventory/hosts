@@ -1,7 +1,7 @@
 # packstack node will act as controller and compute
 
 [packstack]
-packstack ansible_host=192.168.20.61
+packstack ansible_host=192.168.10.235
 
 [all:vars]
 ansible_user=root
