@@ -2,7 +2,7 @@
 
 Deploy openstack proof of concept with one host `controller + compute` node in virtualized env.
 
-## Pre-requisites:
+## Prerequisites:
 
 1. System Requirements:
 - CPU: 4
@@ -17,16 +17,16 @@ Deploy openstack proof of concept with one host `controller + compute` node in v
 
 ## Deployment
 
-1. Update Openstack host information in `inventory/hosts`
+1. Update OpenStack host inventory in `inventory/hosts`
 
 2. Update OpenStack release info `openstack_repo` var in `inventory/group_vars/all.yml`
 
-3. Setup Openstack host
+3. Setup OpenStack host
 ```bash
 ansible-playbook -i inventory/hosts packstack.yml --tags="pre-setup,install-openstack"
 ```
 
-4. Connect to Openstack server over ssh and run below command
+4. Connect to OpenStack server over ssh and run below command to install OpenStack
 ```bash
 packstack --answer-file=/root/packstack-answers.text
 ```
