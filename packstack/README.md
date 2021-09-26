@@ -23,9 +23,15 @@ Storage: 40 GB
 
 3. Setup Openstack host
 ```bash
-ansible-playbook -i inventory/hosts packstack.yml
+ansible-playbook -i inventory/hosts packstack.yml --tags="pre-setup,install-openstack"
+```
 
-4. Connect to Openstack server and run below command
+4. Connect to Openstack server over ssh and run below command
 ```bash
+packstack --answer-file=/root/packstack-answers.text
+```
 
+5. Post config tasks
+```bash
+ansible-playbook -i inventory/hosts packstack.yml --tags="post-setup"
 ```

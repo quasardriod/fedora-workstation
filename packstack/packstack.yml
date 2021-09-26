@@ -21,4 +21,7 @@
   - role: install-openstack
     tags:
       - install-openstack
-      - openstack
+
+  - role: post-setup
+    tags:
+      - post-setup

@@ -1,3 +1,7 @@
+# ips_source: "dhcp|static". Assuming the openstack server intially gets IP from dhcp.
+# If the host already confiured with static IPs for eth0 and eth1, change ips_source to static
+ips_source: dhcp
+
 openstack_repo: centos-release-openstack-victoria
 openstack_pkgs:
   - openstack-swift-object
@@ -34,3 +38,7 @@ openstack_pkgs:
   - openstack-placement-common
   - openstack-swift-container
   - openstack-cinder
+
+# packstack install options
+controller_hosts: "{{ansible_default_ipv4.address}}"
+compute_hosts: "{{ansible_default_ipv4.address}}"

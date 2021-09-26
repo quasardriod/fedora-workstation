@@ -1,9 +1,7 @@
-- name: Install packstack package
-  dnf:
-    name: openstack-packstack
-    state: present
+- include_tasks: packages.yml
 
-- name: Install openstack packages
-  dnf:
-    name: "{{openstack_pkgs}}"
-    state: present
+- name: Template out packstack answer file
+  template:
+    src: packstack-answers.j2
+    dest: /root/packstack-answers.text
+    mode: 0644
