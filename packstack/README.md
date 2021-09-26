@@ -14,6 +14,8 @@ Deploy openstack proof of concept with one host `controller + compute` node in v
   - First interface with internet access (external and control plane network for openstack)
   - Second interface with private network (Only to serve VM traffic, internet access is not needed)
 
+3. Enable nested virtualization if VMs(compute nodes) are hosts in:
+- KVM: https://access.redhat.com/documentation/en-us/red_hat_enterprise_linux/8/html/configuring_and_managing_virtualization/creating-nested-virtual-machines_configuring-and-managing-virtualization
 
 ## Installation
 
