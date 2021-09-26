@@ -1,0 +1,40 @@
+- name: Download oc {{oc_release}} binary
+  get_url:
+    url: "{{oc_binary}}"
+    dest: /root/
+
+- name: Get downloaded file name
+  shell: ls -l /root/|egrep -i openshift|egrep "{{oc_release}}"|egrep ".tar.gz$"|awk '{print $9}'
+  register: _oc_archive
+
+- name: Unarchive {{_oc_archive.stdout}}
+  unarchive:
+    src: "/root/{{_oc_archive.stdout}}"
+    dest: /root/
+    remote_src: yes
+
+- name: Get oc dir name
+  shell: ls -l /root/|egrep -i openshift|egrep "{{oc_release}}"|egrep -v ".tar.gz$"|awk '{print $9}'
+  register: _oc_dir
+
+- debug:
+    var: _oc_dir.stdout
+
+- name: Move oc binaries to /usr/local/bin
+  copy:
+    src: "/root/{{_oc_dir.stdout}}/{{item}}"
+    dest: /usr/local/bin/
+    mode: 0755
+    owner: root
+    group: root
+    remote_src: yes
+  with_items:
+    - "kubectl"
+    - "oc"
+
+- name: Get oc version
+  shell: oc version
+  register: _oc_version
+
+- debug:
+    var: _oc_version.stdout_lines

@@ -1,0 +1,23 @@
+---
+
+- name: Get stat of /etc/yum.repos.d/docker-ce.repo
+  stat:
+    path: /etc/yum.repos.d/docker-ce.repo
+  register: _docker_repo_file
+
+- name: Setup docker repo
+  command: dnf config-manager --add-repo=https://download.docker.com/linux/centos/docker-ce.repo
+  args:
+    warn: false
+  when: not _docker_repo_file.stat.exists
+
+- name: Install docker engine
+  dnf:
+    name: docker-ce
+    state: latest
+
+- name: Start docker engine
+  systemd:
+    name: docker
+    state: started
+    enabled: yes

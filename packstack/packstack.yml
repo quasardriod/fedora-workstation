@@ -3,10 +3,7 @@
 - hosts: packstack
   gather_facts: true
 
-  vars:
-
-
-  pre_tasks:
+    pre_tasks:
   - assert:
       that:
         - ansible_distribution is match('CentOS')

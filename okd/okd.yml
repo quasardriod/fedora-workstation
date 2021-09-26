@@ -1,0 +1,23 @@
+---
+- hosts: aio
+  gather_facts: true
+
+  pre_tasks:
+  - assert:
+      that:
+        - ansible_distribution is match('CentOS') or ansible_distribution is match('RedHat')
+        - ansible_distribution_major_version == "8"
+      fail_msg: "Target System must be RedHat or CentOS 8"
+
+  roles:
+  - role: pre-setup
+    tags:
+      - pre-setup
+
+  - role: docker
+    tags:
+      - docker
+
+  - role: oc
+    tags:
+      - oc
