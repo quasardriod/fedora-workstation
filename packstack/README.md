@@ -10,12 +10,12 @@ Deploy openstack proof of concept with one host `controller + compute` node in v
 - Storage: 40 GB
 
 2. Network Requirements:
-- Two interfaces
+- Two Interfaces
   - First interface with internet access (external and control plane network for openstack)
-  - Second interface with private network (Only to service VM traffic, internet access is not needed)
+  - Second interface with private network (Only to serve VM traffic, internet access is not needed)
 
 
-## Deployment
+## Installation
 
 1. Update OpenStack host inventory in `inventory/hosts`
 
