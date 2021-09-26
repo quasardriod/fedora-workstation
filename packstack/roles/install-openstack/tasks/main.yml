@@ -2,3 +2,8 @@
   dnf:
     name: openstack-packstack
     state: present
+
+- name: Install openstack packages
+  dnf:
+    name: "{{openstack_pkgs}}"
+    state: present

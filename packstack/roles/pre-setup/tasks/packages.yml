@@ -1,0 +1,14 @@
+- name: Enable power tools
+  command: dnf config-manager --enable powertools
+  args:
+    warn: false
+
+- name: Install openstack repo {{openstack_repo}}
+  dnf:
+    name: "{{openstack_repo}}"
+    state: present
+
+- name: Update OS
+  dnf:
+    name: "*"
+    state: latest

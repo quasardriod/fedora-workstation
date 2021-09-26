@@ -1,0 +1,35 @@
+- name: Check 'net.ifnames=0 biosdevname=0' param in /etc/default/grub
+  shell: cat /etc/default/grub|egrep ^GRUB_CMDLINE_LINUX|egrep "net.ifnames=0 biosdevname=0"
+  register: _check_disable_dev_name
+  ignore_errors: true
+
+- block:
+  - name: Get current GRUB_CMDLINE_LINUX settings
+    shell: cat /etc/default/grub|egrep ^GRUB_CMDLINE_LINUX|cut -d'"' -f2
+    register: _current_grub_cmd
+
+  - debug:
+      var: _current_grub_cmd.stdout
+
+  - name: Set fact to switch to native interface names
+    set_fact:
+      _new_kernel_param: "{{_current_grub_cmd.stdout + ' net.ifnames=0 biosdevname=0'}}"
+
+  - debug:
+      var: _new_kernel_param
+
+  - name: Take backup of /etc/default/grub
+    copy:
+      src: /etc/default/grub
+      dest: /etc/default/grub-{{ansible_date_time.iso8601_basic_short}}
+      mode: 0644
+      owner: root
+      group: root
+      remote_src: yes
+
+  - name: Update /etc/default/grub with new kernel param
+    lineinfile:
+      path: /etc/default/grub
+      regexp: '^GRUB_CMDLINE_LINUX'
+      line: 'GRUB_CMDLINE_LINUX="{{_new_kernel_param}}"'
+  when: _check_disable_dev_name.rc != 0

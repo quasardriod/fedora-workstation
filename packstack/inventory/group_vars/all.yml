@@ -1,0 +1,36 @@
+openstack_repo: centos-release-openstack-victoria
+openstack_pkgs:
+  - openstack-swift-object
+  - openstack-packstack-puppet
+  - openstack-nova-conductor
+  - openstack-neutron
+  - openstack-dashboard
+  - openstack-packstack
+  - openstack-ceilometer-common
+  - openstack-aodh-notifier
+  - openstack-nova-scheduler
+  - openstack-swift-account
+  - openstack-neutron-ml2
+  - openstack-nova-migration
+  - openstack-ceilometer-notification
+  - openstack-aodh-common
+  - openstack-aodh-listener
+  - openstack-glance
+  - openstack-nova-common
+  - openstack-selinux
+  - openstack-placement-api
+  - openstack-keystone
+  - openstack-nova-compute
+  - openstack-swift-proxy
+  - openstack-ceilometer-polling
+  - openstack-aodh-api
+  - openstack-nova-api
+  - openstack-nova-novncproxy
+  - openstack-ceilometer-ipmi
+  - openstack-neutron-common
+  - openstack-neutron-ovn-metadata-agent
+  - openstack-dashboard-theme
+  - openstack-aodh-evaluator
+  - openstack-placement-common
+  - openstack-swift-container
+  - openstack-cinder
