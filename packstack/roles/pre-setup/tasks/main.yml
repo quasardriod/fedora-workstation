@@ -1,3 +1,8 @@
-#- include_tasks: services.yml
-#- include_tasks: packages.yml
+- include_tasks: services.yml
+- include_tasks: packages.yml
 - include_tasks: network.yml
+
+- name: Reboot host
+  reboot:
+    reboot_timeout: 3600
+    test_command: "uptime"
