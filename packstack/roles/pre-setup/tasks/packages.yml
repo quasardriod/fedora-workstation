@@ -12,3 +12,8 @@
   dnf:
     name: "*"
     state: latest
+
+- name: Install rsyslog
+  dnf:
+    name: rsyslog
+    state: present

@@ -1,5 +1,5 @@
-- include_tasks: services.yml
 - include_tasks: packages.yml
+- include_tasks: services.yml
 - include_tasks: kernel.yml
 - include_tasks: network.yml
   when: ips_source is match('dhcp')

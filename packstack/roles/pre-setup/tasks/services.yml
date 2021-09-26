@@ -24,3 +24,9 @@
     name: network
     state: started
     enabled: yes
+
+- name: Start and enable rsyslog
+  service:
+    name: rsyslog
+    state: started
+    enabled: yes
