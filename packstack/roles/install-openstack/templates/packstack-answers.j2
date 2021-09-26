@@ -26,7 +26,7 @@ CONFIG_CINDER_INSTALL=y
 
 # Specify 'y' to install OpenStack Shared File System (manila). ['y',
 # 'n']
-CONFIG_MANILA_INSTALL=n
+CONFIG_MANILA_INSTALL={{openstack_projects.manila}}
 
 # Specify 'y' to install OpenStack Compute (nova). ['y', 'n']
 CONFIG_NOVA_INSTALL=y
@@ -38,37 +38,37 @@ CONFIG_NEUTRON_INSTALL=y
 CONFIG_HORIZON_INSTALL=y
 
 # Specify 'y' to install OpenStack Object Storage (swift). ['y', 'n']
-CONFIG_SWIFT_INSTALL=y
+CONFIG_SWIFT_INSTALL={{openstack_projects.swift}}
 
 # Specify 'y' to install OpenStack Metering (ceilometer). Note this
 # will also automatically install gnocchi service and configures it as
 # the metrics backend. ['y', 'n']
-CONFIG_CEILOMETER_INSTALL=y
+CONFIG_CEILOMETER_INSTALL={{openstack_projects.ceilometer}}
 
 # Specify 'y' to install OpenStack Telemetry Alarming (Aodh). Note
 # Aodh requires Ceilometer to be installed as well. ['y', 'n']
-CONFIG_AODH_INSTALL=y
+CONFIG_AODH_INSTALL={{openstack_projects.aodh}}
 
 # Specify 'y' to install OpenStack Events Service (panko). ['y', 'n']
-CONFIG_PANKO_INSTALL=n
+CONFIG_PANKO_INSTALL={{openstack_projects.panko}}
 
 # Specify 'y' to install OpenStack Data Processing (sahara). In case
 # of sahara installation packstack also installs heat.['y', 'n']
-CONFIG_SAHARA_INSTALL=n
+CONFIG_SAHARA_INSTALL={{openstack_projects.sahara}}
 
 # Specify 'y' to install OpenStack Orchestration (heat). ['y', 'n']
-CONFIG_HEAT_INSTALL=y
+CONFIG_HEAT_INSTALL={{openstack_projects.heat}}
 
 # Specify 'y' to install OpenStack Container Infrastructure
 # Management Service (magnum). ['y', 'n']
-CONFIG_MAGNUM_INSTALL=y
+CONFIG_MAGNUM_INSTALL={{openstack_projects.magnum}}
 
 # Specify 'y' to install OpenStack Database (trove) ['y', 'n']
-CONFIG_TROVE_INSTALL=n
+CONFIG_TROVE_INSTALL={{openstack_projects.trove}}
 
 # Specify 'y' to install OpenStack Bare Metal Provisioning (ironic).
 # ['y', 'n']
-CONFIG_IRONIC_INSTALL=n
+CONFIG_IRONIC_INSTALL={{openstack_projects.ironic}}
 
 # Specify 'y' to install the OpenStack Client packages (command-line
 # tools). An admin "rc" file will also be installed. ['y', 'n']
