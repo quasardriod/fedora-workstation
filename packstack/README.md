@@ -1,6 +1,6 @@
 # OpenStack deployment (Packstack on CentOS)
 
-Deploy openstack proof of concept with one host `controller + compute` node in virtualized env.
+Deploy OpenStack proof of concept with one host `controller + compute` node in virtualized env.
 
 ## Prerequisites:
 
@@ -23,17 +23,19 @@ Deploy openstack proof of concept with one host `controller + compute` node in v
 
 2. Update OpenStack release info `openstack_repo` var in `inventory/group_vars/all.yml`
 
-3. Setup OpenStack host
+3. Enable and Disable additional openstack projects using `openstack_projects` var in `inventory/group_vars/all.yml`
+
+4. Setup OpenStack host
 ```bash
 ansible-playbook -i inventory/hosts packstack.yml --tags="pre-setup,install-openstack"
 ```
 
-4. Connect to OpenStack server over ssh and run below command to install OpenStack
+5. Connect to OpenStack server over ssh and run below command to install OpenStack
 ```bash
 packstack --answer-file=/root/packstack-answers.text
 ```
 
-5. Post config tasks
+6. Post config tasks
 ```bash
 ansible-playbook -i inventory/hosts packstack.yml --tags="post-setup"
 ```
