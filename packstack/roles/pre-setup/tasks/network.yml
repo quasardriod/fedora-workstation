@@ -1,0 +1,30 @@
+- setup:
+
+- name: template out eth0 config
+  template:
+    src: eth0.j2
+    dest: /etc/sysconfig/network-scripts/ifcfg-eth0
+    mode: 0644
+    owner: root
+    group: root
+
+- name: template out eth1 config
+  template:
+    src: eth1.j2
+    dest: /etc/sysconfig/network-scripts/ifcfg-eth1
+    mode: 0644
+    owner: root
+    group: root
+
+- name: template out resolv.conf
+  template:
+    src: resolv.j2
+    dest: /etc/resolv.conf
+    mode: 0644
+    owner: root
+    group: root
+
+- name: Reboot host
+  reboot:
+    reboot_timeout: 3600
+    test_command: "uptime"

@@ -1,0 +1,7 @@
+- include_tasks: packages.yml
+
+- name: Template out packstack answer file
+  template:
+    src: packstack-answers.j2
+    dest: /root/packstack-answers.text
+    mode: 0644
