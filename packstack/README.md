@@ -5,9 +5,9 @@ Deploy openstack proof of concept with one host `controller + compute` node in v
 ## Pre-requisites:
 
 1. System Requirements:
-CPU: 4
-Memory: 8 GB
-Storage: 40 GB
+- CPU: 4
+- Memory: 8 GB
+- Storage: 40 GB
 
 2. Network Requirements:
 - Two interfaces
@@ -19,7 +19,7 @@ Storage: 40 GB
 
 1. Update Openstack host information in `inventory/hosts`
 
-2. Update Openstack release info `openstack_repo` var in `inventory/group_vars/all.yml`
+2. Update OpenStack release info `openstack_repo` var in `inventory/group_vars/all.yml`
 
 3. Setup Openstack host
 ```bash
