@@ -1,5 +1,9 @@
 - include_tasks: packages.yml
+
 - include_tasks: services.yml
-- include_tasks: kernel.yml
+
+- include_tasks: disable-bios-names.yml
+  when: ansible_default_ipv4.alias is not match('eth0')
+
 - include_tasks: network.yml
   when: ips_source is match('dhcp')

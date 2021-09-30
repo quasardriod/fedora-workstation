@@ -877,7 +877,7 @@ CONFIG_NEUTRON_OVS_EXTERNAL_PHYSNET=extnet
 # Interface for the Open vSwitch tunnel. Packstack overrides the IP
 # address used for tunnels on this hypervisor to the IP found on the
 # specified interface (for example, eth1).
-CONFIG_NEUTRON_OVS_TUNNEL_IF=
+CONFIG_NEUTRON_OVS_TUNNEL_IF=eth1
 
 # Comma-separated list of subnets (for example,
 # 192.168.10.0/24,192.168.11.0/24) used for sending tunneling packets.
@@ -1291,7 +1291,7 @@ CONFIG_CEILOMETER_COORDINATION_BACKEND=redis
 CONFIG_ENABLE_CEILOMETER_MIDDLEWARE=n
 
 # IP address of the server on which to install the Redis server.
-CONFIG_REDIS_HOST=192.168.10.235
+CONFIG_REDIS_HOST={{controller_hosts}}
 
 # Port on which the Redis server listens.
 CONFIG_REDIS_PORT=6379

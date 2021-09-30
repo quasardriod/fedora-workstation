@@ -1,15 +1,44 @@
 ---
 
-- hosts: packstack
+- hosts: all
   gather_facts: true
 
-    pre_tasks:
+  pre_tasks:
   - assert:
       that:
         - ansible_distribution is match('CentOS')
         - ansible_distribution_major_version == "8"
       fail_msg: "Target System must be CentOS 8"
 
+  - name: Set fact controller_hosts
+    set_fact:
+      controller_hosts: "{{ansible_default_ipv4.address}}"
+    when: inventory_hostname is search('os-ctrl')
+
+  - name: Set fact compute_ips
+    set_fact:
+      compute_ips: []
+
+  - name: Append IPs of compute hosts (and controller) in compute_ips
+    set_fact:
+      compute_ips: "{{compute_ips + [ansible_default_ipv4.address]}}"
+    when:
+      - inventory_hostname is search('os-com') or inventory_hostname is search('os-ctrl')
+      - controller_as_compute|bool
+
+  - name: Append IPs of compute hosts in compute_ips
+    set_fact:
+      compute_ips: "{{compute_ips + [ansible_default_ipv4.address]}}"
+    when:
+      - inventory_hostname is search('os-com')
+      - not controller_as_compute|bool
+
+  - debug:
+      var:
+        - controller_hosts
+        - compute_ips
+
+  - fail:
   roles:
   - role: pre-setup
     tags:
