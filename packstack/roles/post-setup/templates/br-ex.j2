@@ -1,13 +1,13 @@
-TYPE=OVSBridge
-BOOTPROTO=static
-NAME=br-ex
-DEVICE=br-ex
+PROXY_METHOD=none
+BROWSER_ONLY=no
+DEFROUTE=yes
 ONBOOT=yes
+DEVICE=br-ex
+NAME=br-ex
 DEVICETYPE=ovs
-USERCTL=yes
-PEERDNS=yes
-IPV6INIT=no
+OVSBOOTPROTO=static
+TYPE=OVSBridge
 IPADDR={{ansible_default_ipv4.address}}
 NETMASK={{ansible_default_ipv4.netmask}}
 GATEWAY={{ansible_default_ipv4.gateway}}
-DNS1={{ansible_default_ipv4.gateway}}
+OVS_EXTRA="set bridge br-ex fail_mode=standalone"

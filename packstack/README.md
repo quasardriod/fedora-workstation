@@ -35,6 +35,7 @@ ansible-playbook -i inventory/hosts packstack.yml --tags="pre-setup,install-open
 packstack --answer-file=/root/packstack-answers.text
 ```
 
+# Not Needed, will remove later
 6. Post config tasks
 ```bash
 ansible-playbook -i inventory/hosts packstack.yml --tags="post-setup"
