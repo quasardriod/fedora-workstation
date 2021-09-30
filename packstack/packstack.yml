@@ -1,7 +1,8 @@
 ---
 
-- hosts: all
+- hosts: packstack
   gather_facts: true
+  max_fail_percentage: 0
 
   pre_tasks:
   - assert:
@@ -15,30 +16,64 @@
       controller_hosts: "{{ansible_default_ipv4.address}}"
     when: inventory_hostname is search('os-ctrl')
 
-  - name: Set fact compute_ips
+  - name: Set fact compute_ips_list_file
     set_fact:
-      compute_ips: []
+      compute_ips_list_file: "/tmp/compute_ips.yml"
+
+  - name: Create a {{compute_ips_list_file}} on localhost
+    shell: echo "compute_ips:" > {{compute_ips_list_file}}
+    delegate_to: localhost
 
   - name: Append IPs of compute hosts (and controller) in compute_ips
-    set_fact:
-      compute_ips: "{{compute_ips + [ansible_default_ipv4.address]}}"
-    when:
-      - inventory_hostname is search('os-com') or inventory_hostname is search('os-ctrl')
-      - controller_as_compute|bool
+    lineinfile:
+      path: "{{compute_ips_list_file}}"
+      line: '  - {{ansible_default_ipv4.address}}'
+      state: present
+    when: controller_as_compute|bool
+    delegate_to: localhost
 
   - name: Append IPs of compute hosts in compute_ips
-    set_fact:
-      compute_ips: "{{compute_ips + [ansible_default_ipv4.address]}}"
+    lineinfile:
+      path: "{{compute_ips_list_file}}"
+      line: '  - {{ansible_default_ipv4.address}}'
+      state: present
     when:
       - inventory_hostname is search('os-com')
       - not controller_as_compute|bool
+    delegate_to: localhost
+
+  - name: Include vars from {{compute_ips_list_file}}
+    include_vars:
+      file: "{{compute_ips_list_file}}"
+
+  - name: set fact compute_hosts
+    set_fact:
+      compute_hosts: "{{compute_ips|join(',')}}"
 
   - debug:
-      var:
-        - controller_hosts
-        - compute_ips
+      var: controller_hosts
+    run_once: true
 
-  - fail:
+  - debug:
+      var: compute_hosts
+    run_once: true
+
+  - name: Remove {{compute_ips_list_file}}
+    file:
+      path: "{{compute_ips_list_file}}"
+      state: absent
+    delegate_to: localhost
+
+  - assert:
+      that:
+        - compute_hosts is defined
+    when: inventory_hostname is search('os-com') or inventory_hostname is search('os-ctrl')
+
+  - assert:
+      that:
+        - controller_hosts is defined
+    when: inventory_hostname is search('os-ctrl')
+
   roles:
   - role: pre-setup
     tags:
@@ -47,7 +82,3 @@
   - role: install-openstack
     tags:
       - install-openstack
-
-  - role: post-setup
-    tags:
-      - post-setup

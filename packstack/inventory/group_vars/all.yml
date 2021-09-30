@@ -7,13 +7,13 @@ openstack_repo: centos-release-openstack-victoria
 # Enable(y) or Disable(n) additional projects
 openstack_projects:
   manila: n
-  swift: y
-  ceilometer: y
-  aodh: y
+  swift: n
+  ceilometer: n
+  aodh: n
   panko: n
   sahara: n
-  heat: y
-  magnum: y
+  heat: n
+  magnum: n
   trove: n
   ironic: n
 

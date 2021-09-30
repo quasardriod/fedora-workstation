@@ -1,6 +1,6 @@
-- name: Check 'net.ifnames=0 biosdevname=0' param in /etc/default/grub
-  shell: cat /etc/default/grub|egrep ^GRUB_CMDLINE_LINUX|egrep "net.ifnames=0 biosdevname=0"
-  register: _check_disable_dev_name
+- name: Check 'console=tty0 console=ttyS0,115200' param in /etc/default/grub
+  shell: cat /etc/default/grub|egrep ^GRUB_CMDLINE_LINUX|egrep "console=tty0 console=ttyS0,115200"
+  register: _check_console_param
   ignore_errors: true
 
 - block:
@@ -13,7 +13,7 @@
 
   - name: Set fact to switch to native interface names
     set_fact:
-      _new_kernel_param: "{{_current_grub_cmd.stdout + ' net.ifnames=0 biosdevname=0'}}"
+      _new_kernel_param: "{{_current_grub_cmd.stdout + ' console=tty0 console=ttyS0,115200'}}"
 
   - debug:
       var: _new_kernel_param
@@ -36,35 +36,8 @@
   - name: Generate grub config
     command: grub2-mkconfig -o /boot/grub2/grub.cfg
 
-  - name: template out eth0 config
-    template:
-      src: eth0.j2
-      dest: /etc/sysconfig/network-scripts/ifcfg-eth0
-      mode: 0644
-      owner: root
-      group: root
-
-  - name: template out resolv.conf
-    template:
-      src: resolv.j2
-      dest: /etc/resolv.conf
-      mode: 0644
-      owner: root
-      group: root
-
-  - name: Remove old interface files
-    shell: ls -l /etc/sysconfig/network-scripts/ifcfg-*|egrep -v "eth|lo"|awk '{print "rm -rf "$9}'|sh
-
   - name: Reboot host
     reboot:
       reboot_timeout: 600
       test_command: "uptime"
-  when: _check_disable_dev_name.rc != 0
-
-- name: template out resolv.conf
-  template:
-    src: resolv.j2
-    dest: /etc/resolv.conf
-    mode: 0644
-    owner: root
-    group: root
+  when: _check_console_param.rc != 0

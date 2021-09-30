@@ -2,7 +2,10 @@
 
 - include_tasks: services.yml
 
-- include_tasks: disable-bios-names.yml
+- include_tasks: vconsole.yml
+  when: ansible_system_vendor is match('QEMU')
+
+- include_tasks: disable-bios-name.yml
   when: ansible_default_ipv4.alias is not match('eth0')
 
 - include_tasks: network.yml

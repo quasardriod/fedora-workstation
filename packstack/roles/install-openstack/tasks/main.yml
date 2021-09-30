@@ -5,3 +5,4 @@
     src: packstack-answers.j2
     dest: /root/packstack-answers.text
     mode: 0644
+  when: inventory_hostname is search('os-ctrl')

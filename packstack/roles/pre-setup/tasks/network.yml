@@ -1,3 +1,9 @@
+---
+
+- name: Run dhclient command
+  command: dhclient
+  when: ansible_eth1.ipv4 is not defined
+
 - setup:
 
 - name: template out eth0 config
@@ -7,6 +13,7 @@
     mode: 0644
     owner: root
     group: root
+  notify: restart_network
 
 - name: template out eth1 config
   template:
@@ -15,6 +22,7 @@
     mode: 0644
     owner: root
     group: root
+  notify: restart_network
 
 - name: template out resolv.conf
   template:
@@ -23,8 +31,4 @@
     mode: 0644
     owner: root
     group: root
-
-- name: Reboot host
-  reboot:
-    reboot_timeout: 3600
-    test_command: "uptime"
+  notify: restart_network

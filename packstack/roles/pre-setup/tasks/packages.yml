@@ -5,7 +5,10 @@
 
 - name: Install openstack repo {{openstack_repo}}
   dnf:
-    name: "{{openstack_repo}}"
+    name:
+      - "{{openstack_repo}}"
+      - vim
+      - ansible
     state: present
 
 - name: Update OS

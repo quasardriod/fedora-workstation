@@ -2,8 +2,10 @@
   dnf:
     name: openstack-packstack
     state: present
+  when: inventory_hostname is search('os-ctrl')
 
 - name: Install openstack packages
   dnf:
     name: "{{openstack_pkgs}}"
     state: present
+  when: inventory_hostname is search('os-ctrl')

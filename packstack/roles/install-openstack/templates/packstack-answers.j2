@@ -134,11 +134,11 @@ CONFIG_VCENTER_CLUSTER_NAMES=
 
 # (Unsupported!) Server on which to install OpenStack services
 # specific to storage servers such as Image or Block Storage services.
-CONFIG_STORAGE_HOST=192.168.10.235
+CONFIG_STORAGE_HOST={{controller_hosts}}
 
 # (Unsupported!) Server on which to install OpenStack services
 # specific to OpenStack Data Processing (sahara).
-CONFIG_SAHARA_HOST=192.168.10.235
+CONFIG_SAHARA_HOST={{controller_hosts}}
 
 # Comma-separated list of URLs for any additional yum repositories,
 # to use for installation.
@@ -293,7 +293,7 @@ CONFIG_AMQP_AUTH_PASSWORD=PW_PLACEHOLDER
 # installation was not specified in CONFIG_MARIADB_INSTALL, specify
 # the IP address of an existing database server (a MariaDB cluster can
 # also be specified).
-CONFIG_MARIADB_HOST=192.168.10.235
+CONFIG_MARIADB_HOST={{controller_hosts}}
 
 # User name for the MariaDB administrative user.
 CONFIG_MARIADB_USER=root
@@ -336,7 +336,7 @@ CONFIG_KEYSTONE_TOKEN_FORMAT=FERNET
 CONFIG_KEYSTONE_IDENTITY_BACKEND=sql
 
 # URL for the Identity service LDAP backend.
-CONFIG_KEYSTONE_LDAP_URL=ldap://192.168.10.235
+CONFIG_KEYSTONE_LDAP_URL=ldap://{{controller_hosts}}
 
 # User DN for the Identity service LDAP backend.  Used to bind to the
 # LDAP server if the LDAP server does not allow anonymous

@@ -1,6 +1,6 @@
 ---
 
-- hosts: packstack
+- hosts: all
   gather_facts: true
 
   pre_tasks:
@@ -11,4 +11,7 @@
       fail_msg: "Target System must be CentOS 8"
 
   roles:
-  
+  - role: post-setup
+    tags:
+      - post-setup
+    when: inventory_hostname is search('os-ctrl')
