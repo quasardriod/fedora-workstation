@@ -1,0 +1,8 @@
+---
+
+- include_tasks: storage.yml
+- include_tasks: vconsole.yml
+- include_tasks: disable-bios-name.yml
+
+- name: flush handlers
+  meta: flush_handlers

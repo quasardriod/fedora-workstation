@@ -1,0 +1,27 @@
+---
+
+- name: check if ansible is installed
+  shell: which ansible
+  register: _ansible_path
+  ignore_errors: true
+
+- block:
+  - name: Install ansible repo
+    dnf:
+      name: centos-release-ansible-29
+      state: present
+
+  - name: Install ansible
+    dnf:
+      name:
+        - ansible
+        - git
+        - vim
+      state: latest
+  when: _ansible_path.rc != 0
+
+- name: Update OS
+  dnf:
+    name: *
+    state: latest
+  notify: reboot_os

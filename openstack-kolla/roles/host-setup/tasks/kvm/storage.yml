@@ -1,0 +1,53 @@
+---
+
+# Extent root lv size to max capacity, by adding vdb in existing vg
+
+- name: Get device of / mountpoint
+  shell: findmnt /|egrep "^/\s+"|awk '{print $2}'
+  register: _root_device
+
+- debug:
+    var: _root_device.stdout
+
+- block:
+  - name: Get VG name of {{_root_device.stdout}}
+    shell: lvdisplay {{_root_device.stdout}}|awk '/VG Name/{print $3}'
+    register: _vg
+
+  - name: Get LV name of {{_root_device.stdout}}
+    shell: lvdisplay {{_root_device.stdout}}|awk '/LV Name/{print $3}'
+    register: _lv
+
+  - debug:
+      msg: "vdb already initialized as pv"
+    when: ansible_lvm.pvs["/dev/vdb"] is defined
+
+  - debug:
+      msg:
+        - "vdb is not used by root lv VG"
+        - "ansible_devices.vdb.holders: {{ansible_devices.vdb.holders}}"
+    when:
+      - ansible_lvm.pvs["/dev/vdb"].vg is not match(_vg.stdout)
+      - ansible_lvm.pvs["/dev/vdb"] is defined
+
+  - name: Create PV using vdb
+    lvg:
+      vg: "{{_vg.stdout}}"
+      pvs: /dev/vdb
+      pvresize: yes
+    when: ansible_lvm.pvs["/dev/vdb"] is not defined
+
+  - name: Increase {{_root_device.stdout}} LV size to max
+    lvol:
+      vg: "{{_vg.stdout}}"
+      lv: "{{_lv.stdout}}"
+      resizefs: yes
+      size: +100%FREE
+    when:
+      - ansible_lvm.pvs["/dev/vdb"].vg is match(_vg.stdout)
+      - ansible_lvm.pvs["/dev/vdb"].free_g|int > 0
+  when: ansible_devices.vdb is defined
+
+#-
+
+#- name: Check additional disk vdb
