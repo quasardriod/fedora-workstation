@@ -2,7 +2,11 @@
 
 - include_tasks: storage.yml
 - include_tasks: vconsole.yml
+  when: kvm|bool
 - include_tasks: disable-bios-name.yml
 
-- name: flush handlers
-  meta: flush_handlers
+- name: Reboot host
+  reboot:
+    reboot_timeout: 600
+    test_command: "uptime"
+  when: kvm_guest_reboot|bool

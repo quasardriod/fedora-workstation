@@ -8,7 +8,7 @@
 
 - name: template out resolv.conf
   template:
-    src: resolv.j2
+    src: "{{ansible_distribution}}/resolv.j2"
     dest: /etc/resolv.conf
     mode: 0644
     owner: root
@@ -17,7 +17,7 @@
 
 - name: template out eth0 config
   template:
-    src: eth0.j2
+    src: "{{ansible_distribution}}/eth0.j2"
     dest: /etc/sysconfig/network-scripts/ifcfg-eth0
     mode: 0644
     owner: root
@@ -26,7 +26,7 @@
 
 - name: template out eth1 config
   template:
-    src: eth1.j2
+    src: "{{ansible_distribution}}/eth1.j2"
     dest: /etc/sysconfig/network-scripts/ifcfg-eth1
     mode: 0644
     owner: root

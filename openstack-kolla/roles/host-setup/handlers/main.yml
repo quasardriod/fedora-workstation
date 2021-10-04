@@ -4,3 +4,8 @@
   reboot:
     reboot_timeout: 600
     test_command: "uptime"
+
+- name: restart_network
+  service:
+    name: network
+    state: restarted

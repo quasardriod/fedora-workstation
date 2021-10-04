@@ -22,6 +22,6 @@
 
 - name: Update OS
   dnf:
-    name: *
+    name: "*"
     state: latest
   notify: reboot_os

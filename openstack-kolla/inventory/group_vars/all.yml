@@ -1,0 +1,10 @@
+# Target host type [kvm, baremetal, non_kvm]
+# kvm: true - Set true if target machines are KVM guest
+# baremetal: true - Set true if target machines are baremetal host
+# non_kvm: - Set true if target hosts are VMs and hosted on other hypervisor
+
+kvm: true
+baremetal: false
+non_kvm: false
+
+additional_disk: vdb

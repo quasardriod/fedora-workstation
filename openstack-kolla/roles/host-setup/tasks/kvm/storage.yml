@@ -20,22 +20,22 @@
 
   - debug:
       msg: "vdb already initialized as pv"
-    when: ansible_lvm.pvs["/dev/vdb"] is defined
+    when: ansible_lvm.pvs["/dev/{{additional_disk}}"] is defined
 
   - debug:
       msg:
         - "vdb is not used by root lv VG"
-        - "ansible_devices.vdb.holders: {{ansible_devices.vdb.holders}}"
+        - "ansible_devices.vdb.holders: {{ansible_devices.{{additional_disk}}.holders}}"
     when:
-      - ansible_lvm.pvs["/dev/vdb"].vg is not match(_vg.stdout)
-      - ansible_lvm.pvs["/dev/vdb"] is defined
+      - ansible_lvm.pvs["/dev/{{additional_disk}}"].vg is not match(_vg.stdout)
+      - ansible_lvm.pvs["/dev/{{additional_disk}}"] is defined
 
-  - name: Create PV using vdb
+  - name: Create PV using {{additional_disk}}
     lvg:
       vg: "{{_vg.stdout}}"
-      pvs: /dev/vdb
+      pvs: /dev/{{additional_disk}}
       pvresize: yes
-    when: ansible_lvm.pvs["/dev/vdb"] is not defined
+    when: ansible_lvm.pvs["/dev/{{additional_disk}}"] is not defined
 
   - name: Increase {{_root_device.stdout}} LV size to max
     lvol:
@@ -44,9 +44,9 @@
       resizefs: yes
       size: +100%FREE
     when:
-      - ansible_lvm.pvs["/dev/vdb"].vg is match(_vg.stdout)
-      - ansible_lvm.pvs["/dev/vdb"].free_g|int > 0
-  when: ansible_devices.vdb is defined
+      - ansible_lvm.pvs["/dev/{{additional_disk}}"].vg is match(_vg.stdout)
+      - ansible_lvm.pvs["/dev/{{additional_disk}}"].free_g|int > 0
+  when: ansible_devices.{{additional_disk}} is defined
 
 #-
 

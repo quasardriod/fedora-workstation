@@ -35,5 +35,10 @@
 
   - name: Generate grub config
     command: grub2-mkconfig -o /boot/grub2/grub.cfg
-    notify: reboot_os
+    register: _grub_generate_vconsole
+
+  - name: Set kvm_guest_reboot true
+    set_fact:
+      kvm_guest_reboot: true
+    when: _grub_generate_vconsole is changed
   when: _check_console_param.rc != 0

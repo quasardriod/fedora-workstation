@@ -35,20 +35,17 @@
 
   - name: Generate grub config
     command: grub2-mkconfig -o /boot/grub2/grub.cfg
-    notify: reboot_os
+    register: _grub_generate_bios
+
+  - name: Set kvm_guest_reboot true
+    set_fact:
+      kvm_guest_reboot: true
+    when: _grub_generate_bios is changed
 
   - name: template out eth0 config
     template:
-      src: eth0.j2
+      src: "{{ansible_distribution}}/eth0.j2"
       dest: /etc/sysconfig/network-scripts/ifcfg-eth0
-      mode: 0644
-      owner: root
-      group: root
-
-  - name: template out resolv.conf
-    template:
-      src: resolv.j2
-      dest: /etc/resolv.conf
       mode: 0644
       owner: root
       group: root
@@ -56,11 +53,3 @@
   - name: Remove old interface files
     shell: ls -l /etc/sysconfig/network-scripts/ifcfg-*|egrep -v "eth|lo"|awk '{print "rm -rf "$9}'|sh
   when: _check_disable_dev_name.rc != 0
-
-- name: template out resolv.conf
-  template:
-    src: resolv.j2
-    dest: /etc/resolv.conf
-    mode: 0644
-    owner: root
-    group: root
