@@ -3,6 +3,7 @@
 - name: Run dhclient command
   command: dhclient
   when: ansible_eth1.ipv4 is not defined
+  ignore_errors: true
 
 - setup:
 
@@ -31,4 +32,5 @@
     mode: 0644
     owner: root
     group: root
+  when: ansible_eth1 is defined
   notify: restart_network

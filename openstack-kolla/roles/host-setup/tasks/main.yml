@@ -7,5 +7,4 @@
 - include_tasks: kvm/main.yml
   when: ansible_system_vendor is match('QEMU')
 
-- include_tasks: OS/centos/main.yml
-  when: ansible_distribution is match('CentOS')
+- include_tasks: "{{ansible_distribution}}/main.yml"

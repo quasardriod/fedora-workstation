@@ -8,3 +8,4 @@ baremetal: false
 non_kvm: false
 
 additional_disk: vdb
+openstack_release: victoria

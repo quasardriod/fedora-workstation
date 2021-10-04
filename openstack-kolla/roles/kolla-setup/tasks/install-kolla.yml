@@ -1,0 +1,15 @@
+---
+
+- name: Install kolla using pip (non-venv)
+  command: pip install kolla-ansible
+
+- name: Install ansible
+  package:
+    name: ansible
+    state: latest
+- name: Create dir /etc/kolla
+  file:
+    path: /etc/kolla
+    state: directory
+    owner: root
+    group: root

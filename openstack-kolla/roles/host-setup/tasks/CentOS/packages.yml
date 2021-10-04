@@ -1,0 +1,20 @@
+---
+
+- name: Install ansible repo
+  dnf:
+    name: centos-release-ansible-29
+    state: present
+
+- name: Install ansible
+  dnf:
+    name:
+#      - ansible
+      - git
+      - vim
+    state: latest
+
+- name: Update OS
+  dnf:
+    name: "*"
+    state: latest
+  notify: reboot_os
