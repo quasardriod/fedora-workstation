@@ -7,6 +7,7 @@
   package:
     name: ansible
     state: latest
+    
 - name: Create dir /etc/kolla
   file:
     path: /etc/kolla
