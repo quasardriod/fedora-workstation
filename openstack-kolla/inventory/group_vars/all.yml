@@ -6,13 +6,32 @@
 kvm: true
 baremetal: false
 non_kvm: false
+# Openstack deployment type: [allinone, multinode]
+all_in_one: true
+multinode: false
 
-additional_disk: vdb
+disk: vdb
+disk_path: "/dev/{{disk}}"
+
 openstack_release: victoria
 
 ctrl_plane_interface: eth1
 data_interface: eth2
 
+controllers:
+  hostname_01: "os-ctrl"
+  ip_01: 192.168.10.221
+
+computes:
+  hostname_01: "os-com01"
+  ip_01: "192.168.10.207"
+
+auth_info:
+  user: root
+  key_path: ~/.ssh/id_rsa
+  connection: ssh
+
+### globals.yml vars
 os_services:
   aodh: yes
   ceilometer: yes
@@ -25,3 +44,6 @@ os_services:
 neutron:
   qos: yes
   metering: yes
+
+openstack_tag_suffix: ""
+kolla_internal_vip_address: 192.168.10.200

@@ -1,5 +1,7 @@
 ---
 
+- setup:
+
 - debug:
     var: ansible_interfaces
 

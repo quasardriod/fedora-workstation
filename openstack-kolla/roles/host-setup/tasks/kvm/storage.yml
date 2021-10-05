@@ -9,6 +9,12 @@
 - debug:
     var: _root_device.stdout
 
+- name: Set fact disk found for {{disk_path}}
+  set_fact:
+    disk_found: true
+  with_items: "{{ansible_devices}}"
+  when: item is search(disk)
+
 - block:
   - name: Get VG name of {{_root_device.stdout}}
     shell: lvdisplay {{_root_device.stdout}}|awk '/VG Name/{print $3}'
@@ -19,23 +25,22 @@
     register: _lv
 
   - debug:
+      msg: "{{disk_path}} is not a PV"
+    when: ansible_lvm.pvs[disk_path] is not defined
+
+  - debug:
       msg: "vdb already initialized as pv"
-    when: ansible_lvm.pvs["/dev/{{additional_disk}}"] is defined
+    when: ansible_lvm.pvs[disk_path] is defined
 
   - debug:
       msg:
         - "vdb is not used by root lv VG"
-        - "ansible_devices.vdb.holders: {{ansible_devices.{{additional_disk}}.holders}}"
-    when:
-      - ansible_lvm.pvs["/dev/{{additional_disk}}"].vg is not match(_vg.stdout)
-      - ansible_lvm.pvs["/dev/{{additional_disk}}"] is defined
+        - "ansible_devices.vdb.holders: {{ansible_devices.{{disk}}.holders}}"
+    when: ansible_lvm.pvs[disk_path] is defined and ansible_lvm.pvs[disk_path].vg is not match(_vg.stdout)
 
-  - name: Create PV using {{additional_disk}}
-    lvg:
-      vg: "{{_vg.stdout}}"
-      pvs: /dev/{{additional_disk}}
-      pvresize: yes
-    when: ansible_lvm.pvs["/dev/{{additional_disk}}"] is not defined
+  - name: Create PV using {{disk_path}}
+    command: vgextend {{_vg.stdout}} {{disk_path}}
+    when: ansible_lvm.pvs[disk_path] is not defined
 
   - name: Increase {{_root_device.stdout}} LV size to max
     lvol:
@@ -44,9 +49,9 @@
       resizefs: yes
       size: +100%FREE
     when:
-      - ansible_lvm.pvs["/dev/{{additional_disk}}"].vg is match(_vg.stdout)
-      - ansible_lvm.pvs["/dev/{{additional_disk}}"].free_g|int > 0
-  when: ansible_devices.{{additional_disk}} is defined
+      - ansible_lvm.pvs[disk_path].vg is match(_vg.stdout)
+      - ansible_lvm.pvs[disk_path].free_g|int > 0
+  when: disk_found|bool
 
 #-
 
