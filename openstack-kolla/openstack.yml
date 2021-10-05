@@ -8,7 +8,7 @@
     tags:
       - host-setup
 
-  - role: kolla-setup
-    tags:
-      - kolla
-    when: inventory_hostname is search('kolla')
+  #- role: kolla-setup
+  #  tags:
+  #    - kolla
+  #  when: inventory_hostname is search('kolla')

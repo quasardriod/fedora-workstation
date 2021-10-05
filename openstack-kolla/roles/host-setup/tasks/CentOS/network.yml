@@ -1,8 +1,22 @@
 ---
 
+- debug:
+    var: ansible_interfaces
+
 - name: Run dhclient command
-  command: dhclient
-  when: ansible_eth1.ipv4 is not defined
+  shell: |
+    ip link set {{item}} up
+    if ! ip addr show {{item}}|egrep "^\s+inet\s[0-9]+." > /dev/null 2>&1;then
+      if pgrep dhclient > /dev/null 2>&1;then
+          pkill dhclient > /dev/null 2>&1
+          dhclient > /dev/null 2>&1
+      else
+        dhclient > /dev/null 2>&1
+      fi
+    fi
+  with_items:
+    - "{{ansible_interfaces}}"
+  when: item is not match('lo')
   ignore_errors: true
 
 - setup:
@@ -33,4 +47,14 @@
     owner: root
     group: root
   when: ansible_eth1 is defined
+  notify: restart_network
+
+- name: template out eth2 config
+  template:
+    src: "{{ansible_distribution}}/eth2.j2"
+    dest: /etc/sysconfig/network-scripts/ifcfg-eth2
+    mode: 0644
+    owner: root
+    group: root
+  when: ansible_eth2 is defined
   notify: restart_network

@@ -1,5 +1,5 @@
 - name: Check 'net.ifnames=0 biosdevname=0' param in /etc/default/grub
-  shell: cat /etc/default/grub|egrep ^GRUB_CMDLINE_LINUX|egrep "net.ifnames=0 biosdevname=0"
+  shell: cat /etc/default/grub|egrep ^GRUB_CMDLINE_LINUX|egrep "net.ifnames=0 biosdevname=0 ipv6.disable=1"
   register: _check_disable_dev_name
   ignore_errors: true
 
@@ -13,7 +13,7 @@
 
   - name: Set fact to switch to native interface names
     set_fact:
-      _new_kernel_param: "{{_current_grub_cmd.stdout + ' net.ifnames=0 biosdevname=0'}}"
+      _new_kernel_param: "{{_current_grub_cmd.stdout + ' net.ifnames=0 biosdevname=0 ipv6.disable=1'}}"
 
   - debug:
       var: _new_kernel_param
