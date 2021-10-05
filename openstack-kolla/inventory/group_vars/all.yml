@@ -9,3 +9,19 @@ non_kvm: false
 
 additional_disk: vdb
 openstack_release: victoria
+
+ctrl_plane_interface: eth1
+data_interface: eth2
+
+os_services:
+  aodh: yes
+  ceilometer: yes
+  chrony: yes
+  cinder: yes
+  cloudkitty: yes
+  gnocchi: yes
+  swift: yes
+
+neutron:
+  qos: yes
+  metering: yes

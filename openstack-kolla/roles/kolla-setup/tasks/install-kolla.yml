@@ -7,10 +7,18 @@
   package:
     name: ansible
     state: latest
-    
+
 - name: Create dir /etc/kolla
   file:
     path: /etc/kolla
     state: directory
+    owner: root
+    group: root
+
+- name: Copy globals.j2 to kolla host
+  template:
+    src: globals.j2
+    dest: /etc/kolla/globals.yml
+    mode: 0644
     owner: root
     group: root
