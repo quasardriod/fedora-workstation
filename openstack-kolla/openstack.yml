@@ -8,6 +8,11 @@
     tags:
       - host-setup
 
+  - role: pre-setup
+    tags:
+      - pre-setup
+    when: inventory_hostname is not search('kolla')
+
   - role: kolla-setup
     tags:
       - kolla

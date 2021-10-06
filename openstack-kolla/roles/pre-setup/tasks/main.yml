@@ -1,0 +1,10 @@
+---
+
+- name: Install pip3
+  package:
+    name:
+      - python3-pip
+    state: present
+
+- name: Install docker module
+  command: pip3 install docker

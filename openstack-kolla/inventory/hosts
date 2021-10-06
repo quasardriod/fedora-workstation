@@ -4,13 +4,13 @@ os-ctrl ansible_host=192.168.10.221
 [computes]
 os-com01 ansible_host=192.168.10.207
 
-#[ansible_kolla]
-#os-kolla ansible_host=192.168.10.34
+[ansible_kolla]
+os-kolla ansible_host=192.168.10.34
 
 [openstack_nodes:children]
 controllers
 computes
-#ansible_kolla
+ansible_kolla
 
 [all:vars]
 ansible_user=root
