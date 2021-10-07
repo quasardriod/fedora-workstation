@@ -28,13 +28,13 @@ cinder_volume_name: cinder-volume
 all_in_one: true
 multinode: false
 
-
 # Interface and IP related vars
 # System must have 4 interfaces [eth{0..3}]
 # eth0 - System management interface
 # eth1 - control plane network (API traffic and endpoint)
 # eth2 - Storage and tenant network - external connectivity is not needed
 # eth3 - External network for tenant
+dns_domain: "ge.net"
 ctrlplane_eth: eth1
 data_eth: eth2
 external_eth: eth3

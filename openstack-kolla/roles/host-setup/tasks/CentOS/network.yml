@@ -11,7 +11,10 @@
     if ! ip addr show {{item}}|egrep "^\s+inet\s[0-9]+." > /dev/null 2>&1;then
       if pgrep dhclient > /dev/null 2>&1;then
           pkill dhclient > /dev/null 2>&1
-          dhclient > /dev/null 2>&1
+          if ! which dhclient > /dev/null 2>&1;then
+            dnf install dhcp-client -y -q
+            dhclient > /dev/null 2>&1
+          fi
       else
         dhclient > /dev/null 2>&1
       fi
@@ -59,4 +62,14 @@
     owner: root
     group: root
   when: ansible_eth2 is defined
+  notify: restart_network
+
+- name: template out eth3 config
+  template:
+    src: "{{ansible_distribution}}/eth3.j2"
+    dest: /etc/sysconfig/network-scripts/ifcfg-eth3
+    mode: 0644
+    owner: root
+    group: root
+  when: ansible_eth3 is defined
   notify: restart_network

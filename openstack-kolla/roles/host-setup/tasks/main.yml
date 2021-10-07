@@ -4,6 +4,40 @@
   hostname:
     name: "{{inventory_hostname}}"
 
+- name: Remove /tmp/hosts-info on localhost
+  file:
+    path: /tmp/hosts-info
+    state: absent
+  delegate_to: localhost
+
+- name: Create /tmp/hosts-info on localhost
+  file:
+    path: /tmp/hosts-info
+    state: touch
+  delegate_to: localhost
+
+- name: Add all hosts info in /tmp/hosts-info on localhost
+  lineinfile:
+    path: /tmp/hosts-info
+    line: '{{ansible_eth1.ipv4.address}} {{inventory_hostname}}.{{dns_domain}} {{inventory_hostname}}'
+    state: present
+  delegate_to: localhost
+
+- name: Add hosts info from /tmp/hosts-info to /etc/hosts
+  lineinfile:
+    path: /etc/hosts
+    regexp: '{{item}}'
+    line: '{{item}}'
+    state: present
+  with_file:
+    - /tmp/hosts-info
+
+- name: Delete /tmp/hosts-info from localhost
+  file:
+    path: /tmp/hosts-info
+    state: absent
+  delegate_to: localhost
+
 - include_tasks: kvm/main.yml
   when: ansible_system_vendor is match('QEMU')
 
