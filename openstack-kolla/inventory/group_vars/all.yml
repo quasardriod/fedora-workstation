@@ -3,20 +3,74 @@
 # baremetal: true - Set true if target machines are baremetal host
 # non_kvm: - Set true if target hosts are VMs and hosted on other hypervisor
 
-kvm: true
-baremetal: false
-non_kvm: false
+
+### KVM Related vars
+kvm: false
+kvm_guest_reboot: false
+####################
+
+# Increase / FS space
+increase_root_space: false
+disk_for_root: vdb
+disk_for_root_path: "/dev/{{disk_for_root}}"
+####################################
+
+# Create cinder volume
+create_cinder_volume: false
+cinder_disk: vdb
+cinder_disk_path: "/dev/{{cinder_disk}}"
+cinder_volume_name: cinder-volume
+####################################
+
 # Openstack deployment type: [allinone, multinode]
+# in multinode, this code consider 3 nodes controller deployment.
+# If you have only one controller and any no. of compute nodes, choose set [all_in_one: true]
 all_in_one: true
 multinode: false
 
-disk: vdb
-disk_path: "/dev/{{disk}}"
 
+# Interface and IP related vars
+# System must have 4 interfaces [eth{0..3}]
+# eth0 - System management interface
+# eth1 - control plane network (API traffic and endpoint)
+# eth2 - Storage and tenant network - external connectivity is not needed
+# eth3 - External network for tenant
+ctrlplane_eth: eth1
+data_eth: eth2
+external_eth: eth3
+
+# Set variables for globals.yml
+# allinone_deployment
+node_custom_config: "/etc/kolla/config"
+docker_namespace: "kolla"
+openstack_region_name: "RegionOne"
+kolla_base_distro: "{{ansible_distribution|lower}}"
+kolla_install_type: source
 openstack_release: victoria
+kolla_internal_vip_address: "{{ansible_eth1.ipv4.address}}"
+network_interface: "{{ctrlplane_eth}}"
+storage_interface: "{{data_eth}}"
+tunnel_interface: "{{data_eth}}"
+neutron_external_interface: "{{external_eth}}"
+enable_aodh: "yes"
+enable_ceilometer: "yes"
+enable_cinder: "yes"
+enable_cinder_backup: "yes"
+enable_cinder_backend_lvm: "yes"
+enable_cloudkitty: "yes"
+enable_gnocchi: "yes"
+enable_gnocchi_statsd: "yes"
+enable_neutron_qos: "yes"
+enable_neutron_provider_networks: "yes"
+enable_neutron_metering: "yes"
+enable_nova_ssh: "yes"
+rabbitmq_enable_tls: "yes"
+# Valid options are [ qemu, kvm, vmware ]
+nova_compute_virt_type: "kvm"
+enable_collectd: "yes"
+cinder_volume_group: "{{cinder_volume_name}}"
+###################################3
 
-ctrl_plane_interface: eth1
-data_interface: eth2
 
 controllers:
   hostname_01: "os-ctrl"
@@ -30,20 +84,3 @@ auth_info:
   user: root
   key_path: ~/.ssh/id_rsa
   connection: ssh
-
-### globals.yml vars
-os_services:
-  aodh: yes
-  ceilometer: yes
-  chrony: yes
-  cinder: yes
-  cloudkitty: yes
-  gnocchi: yes
-  swift: yes
-
-neutron:
-  qos: yes
-  metering: yes
-
-openstack_tag_suffix: ""
-kolla_internal_vip_address: 192.168.10.200

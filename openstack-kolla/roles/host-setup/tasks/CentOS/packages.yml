@@ -5,13 +5,22 @@
     name: centos-release-ansible-29
     state: present
 
-- name: Install ansible
+- name: Install packages
   dnf:
     name:
-#      - ansible
       - git
       - vim
+      - gcc
+      - gcc-c++
+      - python3-devel
+      - libffi-devel
+      - openssl-devel
+      - python3-libselinux
+      - python3-pip
     state: latest
+
+- name: Update pip
+  command: pip3 install -U pip
 
 - name: Update OS
   dnf:

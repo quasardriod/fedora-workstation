@@ -9,11 +9,11 @@
 - debug:
     var: _root_device.stdout
 
-- name: Set fact disk found for {{disk_path}}
+- name: Set fact disk found for {{disk_for_root_path}}
   set_fact:
     disk_found: true
   with_items: "{{ansible_devices}}"
-  when: item is search(disk)
+  when: item is search(disk_for_root)
 
 - block:
   - name: Get VG name of {{_root_device.stdout}}
@@ -25,22 +25,22 @@
     register: _lv
 
   - debug:
-      msg: "{{disk_path}} is not a PV"
-    when: ansible_lvm.pvs[disk_path] is not defined
+      msg: "{{disk_for_root_path}} is not a PV"
+    when: ansible_lvm.pvs[disk_for_root_path] is not defined
 
   - debug:
       msg: "vdb already initialized as pv"
-    when: ansible_lvm.pvs[disk_path] is defined
+    when: ansible_lvm.pvs[disk_for_root_path] is defined
 
   - debug:
       msg:
         - "vdb is not used by root lv VG"
-        - "ansible_devices.vdb.holders: {{ansible_devices.{{disk}}.holders}}"
-    when: ansible_lvm.pvs[disk_path] is defined and ansible_lvm.pvs[disk_path].vg is not match(_vg.stdout)
+        - "ansible_devices.vdb.holders: {{ansible_devices.{{disk_for_root}}.holders}}"
+    when: ansible_lvm.pvs[disk_for_root_path] is defined and ansible_lvm.pvs[disk_for_root_path].vg is not match(_vg.stdout)
 
-  - name: Create PV using {{disk_path}}
-    command: vgextend {{_vg.stdout}} {{disk_path}}
-    when: ansible_lvm.pvs[disk_path] is not defined
+  - name: Create PV using {{disk_for_root_path}}
+    command: vgextend {{_vg.stdout}} {{disk_for_root_path}}
+    when: ansible_lvm.pvs[disk_for_root_path] is not defined
 
   - name: Increase {{_root_device.stdout}} LV size to max
     lvol:
@@ -49,10 +49,6 @@
       resizefs: yes
       size: +100%FREE
     when:
-      - ansible_lvm.pvs[disk_path].vg is match(_vg.stdout)
-      - ansible_lvm.pvs[disk_path].free_g|int > 0
-  when: disk_found|bool
-
-#-
-
-#- name: Check additional disk vdb
+      - ansible_lvm.pvs[disk_for_root_path].vg is match(_vg.stdout)
+      - ansible_lvm.pvs[disk_for_root_path].free_g|int > 0
+  when: disk_found is defined and disk_found|bool

@@ -8,12 +8,7 @@
     tags:
       - host-setup
 
-  - role: pre-setup
-    tags:
-      - pre-setup
-    when: inventory_hostname is not search('kolla')
-
   - role: kolla-setup
     tags:
       - kolla
-    when: inventory_hostname is search('kolla')
+    when: inventory_hostname is search('os-ctrl') or inventory_hostname is search('os-ctrl01')

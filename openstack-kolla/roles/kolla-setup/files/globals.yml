@@ -1,4 +1,6 @@
 ---
+# Custom changes managed by Ansible
+########################
 # You can use this file to override _any_ variable throughout Kolla.
 # Additional options can be found in the
 # 'kolla-ansible/ansible/group_vars/all.yml' file. Default value of all the
@@ -28,14 +30,14 @@
 #config_strategy: "COPY_ALWAYS"
 
 # Valid options are ['centos', 'debian', 'rhel', 'ubuntu']
-kolla_base_distro: "centos"
+#kolla_base_distro: "centos"
 
 # Valid options are [ binary, source ]
 # This only affects OpenStack services. Infrastructure services are always “binary”.
-kolla_install_type: "source"
+#kolla_install_type: "source"
 
 # Do not override this unless you know what you are doing.
-openstack_release: "victoria"
+#openstack_release: "victoria"
 
 # Docker image tag used by default.
 #openstack_tag: "{{ openstack_release ~ openstack_tag_suffix }}"
@@ -51,7 +53,7 @@ openstack_release: "victoria"
 # All-In-One without haproxy and keepalived, you can set enable_haproxy to no
 # in "OpenStack options" section, and set this value to the IP of your
 # 'network_interface' as set in the Networking section below.
-kolla_internal_vip_address: "192.168.10.97"
+#kolla_internal_vip_address: "192.168.10.97"
 
 # This is the DNS name that maps to the kolla_internal_vip_address VIP. By
 # default it is the same as kolla_internal_vip_address.
@@ -121,16 +123,16 @@ om_enable_rabbitmq_tls: "{{ rabbitmq_enable_tls | bool }}"
 # Yet another way to workaround the naming problem is to create a bond for the
 # interface on all hosts and give the bond name here. Similar strategy can be
 # followed for other types of interfaces.
-network_interface: "eth0"
+#network_interface: "eth0"
 
 # These can be adjusted for even more customization. The default is the same as
 # the 'network_interface'. These interfaces must contain an IP address.
 kolla_external_vip_interface: "{{ network_interface }}"
 api_interface: "{{ network_interface }}"
-storage_interface: "eth2"
+#storage_interface: "eth2"
 swift_storage_interface: "{{ storage_interface }}"
 swift_replication_interface: "{{ swift_storage_interface }}"
-tunnel_interface: "eth2"
+#tunnel_interface: "eth2"
 dns_interface: "{{ network_interface }}"
 octavia_network_interface: "{{ api_interface }}"
 
@@ -151,7 +153,7 @@ dns_address_family: "{{ network_address_family }}"
 # though an IP address can exist on this interface, it will be unusable in most
 # configurations. It is recommended this interface not be configured with any IP
 # addresses for that reason.
-neutron_external_interface: "eth1"
+#neutron_external_interface: "eth1"
 
 # Valid options are [ openvswitch, ovn, linuxbridge, vmware_nsxv, vmware_nsxv3, vmware_dvs ]
 # if vmware_nsxv3 is selected, enable_openvswitch MUST be set to "no" (default is yes)
@@ -219,8 +221,8 @@ neutron_plugin_agent: "openvswitch"
 # allow clients to perform authentication.
 #kolla_enable_tls_internal: "no"
 kolla_enable_tls_external: "{{ kolla_enable_tls_internal if kolla_same_external_internal_vip | bool else 'no' }}"
-#kolla_certificates_dir: "{{ node_config }}/certificates"
-kolla_external_fqdn_cert: "{{ kolla_certificates_dir }}/haproxy.pem"
+kolla_certificates_dir: "{{ node_config }}/certificates"
+#kolla_external_fqdn_cert: "{{ kolla_certificates_dir }}/haproxy.pem"
 #kolla_internal_fqdn_cert: "{{ kolla_certificates_dir }}/haproxy-internal.pem"
 #kolla_admin_openrc_cacert: ""
 #kolla_copy_ca_into_containers: "no"
@@ -253,7 +255,7 @@ kolla_external_fqdn_cert: "{{ kolla_certificates_dir }}/haproxy.pem"
 # Region options
 ################
 # Use this option to change the name of this region.
-openstack_region_name: "RegionOne"
+#openstack_region_name: "RegionOne"
 
 # Use this option to define a list of region names - only needs to be configured
 # in a multi-region deployment, and then only in the *first* region.
@@ -273,9 +275,9 @@ enable_openstack_core: "yes"
 # These roles are required for Kolla to be operation, however a savvy deployer
 # could disable some of these required roles and run their own services.
 enable_glance: "{{ enable_openstack_core | bool }}"
-enable_hacluster: "no"
-enable_haproxy: "no"
-enable_keepalived: "{{ enable_haproxy | bool }}"
+#enable_hacluster: "no"
+#enable_haproxy: "no"
+#enable_keepalived: "{{ enable_haproxy | bool }}"
 enable_keystone: "{{ enable_openstack_core | bool }}"
 enable_mariadb: "yes"
 enable_memcached: "yes"
@@ -285,22 +287,22 @@ enable_nova: "{{ enable_openstack_core | bool }}"
 #enable_outward_rabbitmq: "{{ enable_murano | bool }}"
 
 # OpenStack services can be enabled or disabled with these options
-enable_aodh: "yes"
+#enable_aodh: "no"
 #enable_barbican: "no"
 #enable_blazar: "no"
-enable_ceilometer: "yes"
+#enable_ceilometer: "no"
 #enable_ceilometer_ipmi: "no"
 #enable_cells: "no"
 #enable_central_logging: "no"
-enable_chrony: "no"
-enable_cinder: "no"
-enable_cinder_backup: "no"
+#enable_chrony: "no"
+#enable_cinder: "no"
+#enable_cinder_backup: "no"
 #enable_cinder_backend_hnas_nfs: "no"
 #enable_cinder_backend_iscsi: "{{ enable_cinder_backend_lvm | bool }}"
-enable_cinder_backend_lvm: "no"
+#enable_cinder_backend_lvm: "no"
 #enable_cinder_backend_nfs: "no"
-enable_cinder_backend_quobyte: "no"
-enable_cloudkitty: "yes"
+#enable_cinder_backend_quobyte: "no"
+#enable_cloudkitty: "no"
 #enable_collectd: "no"
 #enable_cyborg: "no"
 #enable_designate: "no"
@@ -308,10 +310,10 @@ enable_cloudkitty: "yes"
 #enable_elasticsearch: "{{ 'yes' if enable_central_logging | bool or enable_osprofiler | bool or enable_skydive | bool or enable_monasca | bool or (enable_cloudkitty | bool and cloudkitty_storage_backend == 'elasticsearch') else 'no' }}"
 #enable_elasticsearch_curator: "no"
 #enable_etcd: "no"
-#enable_fluentd: "yes"
+#enable_fluentd: "no"
 #enable_freezer: "no"
-enable_gnocchi: "yes"
-enable_gnocchi_statsd: "yes"
+#nable_gnocchi_statsd: "no"
+#enable_gnocchi: "no"
 #enable_grafana: "{{ enable_monasca | bool }}"
 enable_heat: "{{ enable_openstack_core | bool }}"
 enable_horizon: "{{ enable_openstack_core | bool }}"
@@ -362,18 +364,18 @@ enable_influxdb: "{{ enable_monasca | bool or (enable_cloudkitty | bool and clou
 #enable_neutron_vpnaas: "no"
 #enable_neutron_sriov: "no"
 #enable_neutron_dvr: "no"
-enable_neutron_qos: "yes"
+#enable_neutron_qos: "no"
 #enable_neutron_agent_ha: "no"
 #enable_neutron_bgp_dragent: "no"
-enable_neutron_provider_networks: "yes"
+#enable_neutron_provider_networks: "yes"
 #enable_neutron_segments: "no"
 #enable_neutron_sfc: "no"
 #enable_neutron_trunk: "no"
-enable_neutron_metering: "yes"
+#enable_neutron_metering: "no"
 #enable_neutron_infoblox_ipam_agent: "no"
 #enable_neutron_port_forwarding: "no"
 #enable_nova_serialconsole_proxy: "no"
-enable_nova_ssh: "yes"
+#enable_nova_ssh: "yes"
 #enable_octavia: "no"
 #enable_octavia_driver_agent: "{{ enable_octavia | bool and neutron_plugin_agent == 'ovn' }}"
 enable_openvswitch: "{{ enable_neutron | bool and neutron_plugin_agent != 'linuxbridge' }}"
@@ -419,7 +421,7 @@ enable_swift_s3api: "no"
 # and not to busy wait (+sbwt none +sbwtdcpu none +sbwtdio none):
 #rabbitmq_server_additional_erl_args: "+S 2:2 +sbwt none +sbwtdcpu none +sbwtdio none"
 # Whether to enable TLS encryption for RabbitMQ client-server communication.
-rabbitmq_enable_tls: "no"
+#rabbitmq_enable_tls: "no"
 # CA certificate bundle in RabbitMQ container.
 #rabbitmq_cacert: "/etc/ssl/certs/{{ 'ca-certificates.crt' if kolla_base_distro in ['debian', 'ubuntu'] else 'ca-bundle.trust.crt' }}"
 
@@ -557,7 +559,7 @@ cloudkitty_storage_backend: "influxdb"
 #nova_backend_ceph: "no"
 
 # Valid options are [ qemu, kvm, vmware ]
-nova_compute_virt_type: "kvm"
+#nova_compute_virt_type: "kvm"
 
 # The number of fake driver per compute node
 #num_nova_fake_per_node: 5

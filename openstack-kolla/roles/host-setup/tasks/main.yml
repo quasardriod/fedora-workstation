@@ -7,4 +7,9 @@
 - include_tasks: kvm/main.yml
   when: ansible_system_vendor is match('QEMU')
 
+- include_tasks: disable-bios-name.yml
+
+- include_tasks: cinder-volume.yml
+  when: inventory_hostname is search('os-com')
+
 - include_tasks: "{{ansible_distribution}}/main.yml"

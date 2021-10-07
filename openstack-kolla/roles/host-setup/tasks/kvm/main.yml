@@ -1,9 +1,10 @@
 ---
 
-- include_tasks: storage.yml
+- include_tasks: root-storage.yml
+  when: increase_root_space|bool
+
 - include_tasks: vconsole.yml
   when: kvm|bool
-- include_tasks: disable-bios-name.yml
 
 - name: Reboot host
   reboot:

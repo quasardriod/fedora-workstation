@@ -1,0 +1,33 @@
+---
+
+- debug:
+    msg: "{{cinder_volume_name}} VG is already exists"
+  when: ansible_lvm.vgs[cinder_volume_name] is defined
+
+
+- debug:
+    msg: "{{cinder_disk_path}} PV is already assigned to {{cinder_volume_name}} VG"
+  when: ansible_lvm.vgs[cinder_volume_name] is defined and ansible_lvm.pvs[cinder_disk_path].vg is match(cinder_volume_name)
+
+- name: Set fact disk found for {{cinder_disk_path}}
+  set_fact:
+    disk_found: true
+  with_items: "{{ansible_devices}}"
+  when: item is search(cinder_disk) and ansible_lvm.pvs[cinder_disk_path] is not defined
+
+- name: set fact create_cinder_volume to true
+  set_fact:
+    create_cinder_volume: true
+  when: ansible_lvm.vgs[cinder_volume_name] is not defined and ansible_lvm.pvs[cinder_disk_path] is not defined
+
+- name: Create PV {{cinder_disk_path}} and VG {{cinder_volume_name}}
+  lvg:
+    vg: "{{cinder_volume_name}}"
+    pvs: "{{cinder_disk_path}}"
+  when: (disk_found is defined and disk_found|bool) and create_cinder_volume|bool
+
+- setup:
+
+- fail:
+    msg: "{{cinder_volume_name}} is missing"
+  when: ansible_lvm.vgs[cinder_volume_name] is not defined

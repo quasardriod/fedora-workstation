@@ -37,11 +37,11 @@
     command: grub2-mkconfig -o /boot/grub2/grub.cfg
     register: _grub_generate_bios
 
-  - name: Set kvm_guest_reboot true
-    set_fact:
-      kvm_guest_reboot: true
-    when: _grub_generate_bios is changed
-
+  - name: Reboot host
+    reboot:
+      reboot_timeout: 600
+      test_command: "uptime"
+      
   - name: template out eth0 config
     template:
       src: "{{ansible_distribution}}/eth0.j2"
