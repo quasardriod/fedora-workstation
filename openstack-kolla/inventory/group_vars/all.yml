@@ -10,7 +10,7 @@ kvm_guest_reboot: false
 ####################
 
 # Increase / FS space
-increase_root_space: false
+increase_root_space: true
 disk_for_root: vdb
 disk_for_root_path: "/dev/{{disk_for_root}}"
 ####################################
@@ -34,7 +34,7 @@ multinode: false
 # eth1 - control plane network (API traffic and endpoint)
 # eth2 - Storage and tenant network - external connectivity is not needed
 # eth3 - External network for tenant
-dns_domain: "ge.net"
+dns_domain: "quasarstack.net"
 ctrlplane_eth: eth1
 data_eth: eth2
 external_eth: eth3

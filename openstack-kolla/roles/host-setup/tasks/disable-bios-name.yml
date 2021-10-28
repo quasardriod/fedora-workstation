@@ -33,23 +33,44 @@
       regexp: '^GRUB_CMDLINE_LINUX'
       line: 'GRUB_CMDLINE_LINUX="{{_new_kernel_param}}"'
 
-  - name: Generate grub config
+  - name: Generate grub config for RHEL based system
     command: grub2-mkconfig -o /boot/grub2/grub.cfg
     register: _grub_generate_bios
+    when: ansible_distribution is match('CentOS')
 
-  - name: Reboot host
-    reboot:
-      reboot_timeout: 600
-      test_command: "uptime"
-      
-  - name: template out eth0 config
+  - name: Generate grub config for Ubuntu
+    command: grub-mkconfig -o /boot/grub/grub.cfg
+    register: _grub_generate_bios
+    when: ansible_distribution is match('Ubuntu')
+   
+  - name: template out eth0 config for RHEL based system
     template:
       src: "{{ansible_distribution}}/eth0.j2"
       dest: /etc/sysconfig/network-scripts/ifcfg-eth0
       mode: 0644
       owner: root
       group: root
+    when: ansible_distribution is match('CentOS')
 
-  - name: Remove old interface files
+  - name: Remove old interface files for RHEL based system
     shell: ls -l /etc/sysconfig/network-scripts/ifcfg-*|egrep -v "eth|lo"|awk '{print "rm -rf "$9}'|sh
+    when: ansible_distribution is match('CentOS')
+
+  - name: Remove old interface files for Ubuntu
+    shell: rm -rf /etc/netplan/*.yaml
+    when: ansible_distribution is match('Ubuntu')
+
+  - name: template out eth0 config for Ubuntu
+    template:
+      src: "{{ansible_distribution}}/networks-eth0.j2"
+      dest: /etc/netplan/networks.yaml
+      mode: 0644
+      owner: root
+      group: root
+    when: ansible_distribution is match('Ubuntu')
+  
+  - name: Reboot host
+    reboot:
+      reboot_timeout: 600
+      test_command: "uptime"
   when: _check_disable_dev_name.rc != 0

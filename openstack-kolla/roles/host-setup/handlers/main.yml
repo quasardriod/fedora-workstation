@@ -9,3 +9,6 @@
   service:
     name: network
     state: restarted
+
+- name: apply_netconfig
+  command: netplan --debug apply

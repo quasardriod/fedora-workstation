@@ -1,7 +1,7 @@
 ---
 
 - include_tasks: root-storage.yml
-  when: increase_root_space|bool
+  when: increase_root_space|bool and ansible_distribution is match('CentOS')
 
 - include_tasks: vconsole.yml
   when: kvm|bool

@@ -33,9 +33,15 @@
       regexp: '^GRUB_CMDLINE_LINUX'
       line: 'GRUB_CMDLINE_LINUX="{{_new_kernel_param}}"'
 
-  - name: Generate grub config
+  - name: Generate grub config for Ubuntu
+    command: grub-mkconfig -o /boot/grub/grub.cfg
+    register: _grub_generate_vconsole
+    when: ansible_distribution is match('Ubuntu')
+
+  - name: Generate grub config for RHEL based system
     command: grub2-mkconfig -o /boot/grub2/grub.cfg
     register: _grub_generate_vconsole
+    when: ansible_distribution is match('CentOS')
 
   - name: Set kvm_guest_reboot true
     set_fact:

@@ -1,0 +1,23 @@
+---
+
+- name: Install packages
+  package:
+    name:
+      - git
+      - vim
+      - build-essential
+#      - python3-devel
+#      - libffi-devel
+#      - openssl-devel
+#      - python3-libselinux
+      - python3-pip
+    state: latest
+
+- name: Update pip
+  command: pip3 install -U pip
+
+- name: Update OS
+  package:
+    name: "*"
+    state: latest
+  notify: reboot_os

@@ -28,7 +28,7 @@
 
 - name: template out resolv.conf
   template:
-    src: "{{ansible_distribution}}/resolv.j2"
+    src: resolv.j2
     dest: /etc/resolv.conf
     mode: 0644
     owner: root

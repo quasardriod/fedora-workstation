@@ -1,6 +1,6 @@
 ---
 
-- hosts: all
+- hosts: openstack_nodes
   gather_facts: true
 
   roles:
@@ -8,7 +8,7 @@
     tags:
       - host-setup
 
-  - role: kolla-setup
-    tags:
-      - kolla
-    when: inventory_hostname is search('os-ctrl') or inventory_hostname is search('os-ctrl01')
+  #- role: kolla-setup
+  #  tags:
+  #    - kolla
+  #  when: inventory_hostname is search('os-ctrl') or inventory_hostname is search('os-ctrl01')
