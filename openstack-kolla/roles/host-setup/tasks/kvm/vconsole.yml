@@ -1,19 +1,25 @@
 - name: Check 'console=tty0 console=ttyS0,115200' param in /etc/default/grub
-  shell: cat /etc/default/grub|egrep ^GRUB_CMDLINE_LINUX|egrep "console=tty0 console=ttyS0,115200"
+  shell: cat /etc/default/grub|egrep -w ^GRUB_CMDLINE_LINUX|egrep "console=tty0 console=ttyS0,115200"
   register: _check_console_param
   ignore_errors: true
 
 - block:
   - name: Get current GRUB_CMDLINE_LINUX settings
-    shell: cat /etc/default/grub|egrep ^GRUB_CMDLINE_LINUX|cut -d'"' -f2
+    shell: cat /etc/default/grub|egrep -w ^GRUB_CMDLINE_LINUX|cut -d'"' -f2
     register: _current_grub_cmd
 
   - debug:
-      var: _current_grub_cmd.stdout
+      var: _current_grub_cmd.stdout_lines
 
   - name: Set fact to switch to native interface names
     set_fact:
       _new_kernel_param: "{{_current_grub_cmd.stdout + ' console=tty0 console=ttyS0,115200'}}"
+    when: _current_grub_cmd.stdout_lines|length != 0
+
+  - name: Set fact to switch to native interface names
+    set_fact:
+      _new_kernel_param: "console=tty0 console=ttyS0,115200"
+    when: _current_grub_cmd.stdout_lines|length == 0
 
   - debug:
       var: _new_kernel_param
@@ -30,21 +36,21 @@
   - name: Update /etc/default/grub with new kernel param
     lineinfile:
       path: /etc/default/grub
-      regexp: '^GRUB_CMDLINE_LINUX'
+      regexp: '^GRUB_CMDLINE_LINUX='
       line: 'GRUB_CMDLINE_LINUX="{{_new_kernel_param}}"'
 
   - name: Generate grub config for Ubuntu
     command: grub-mkconfig -o /boot/grub/grub.cfg
-    register: _grub_generate_vconsole
+    register: _grub_generate_vconsole_ubuntu
     when: ansible_distribution is match('Ubuntu')
 
   - name: Generate grub config for RHEL based system
     command: grub2-mkconfig -o /boot/grub2/grub.cfg
-    register: _grub_generate_vconsole
+    register: _grub_generate_vconsole_centos
     when: ansible_distribution is match('CentOS')
 
   - name: Set kvm_guest_reboot true
     set_fact:
       kvm_guest_reboot: true
-    when: _grub_generate_vconsole is changed
+    when: _grub_generate_vconsole_centos is changed or _grub_generate_vconsole_ubuntu is changed
   when: _check_console_param.rc != 0

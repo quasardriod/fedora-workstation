@@ -85,6 +85,13 @@
     state: present
     insertafter: '^[defaults]'
 
+- name: Tweak ansible.conf
+  lineinfile:
+    path: /etc/ansible/ansible.cfg
+    regexp: '^(#log_path|log_path)'
+    line: 'log_path=/tmp/ansible.log'
+    state: present
+
 #- name: Copy all-in-one inventory
 #  template:
 #    src: all-in-one.j2

@@ -5,7 +5,7 @@
 
 
 ### KVM Related vars
-kvm: false
+kvm: true
 kvm_guest_reboot: false
 ####################
 
@@ -54,9 +54,9 @@ tunnel_interface: "{{data_eth}}"
 neutron_external_interface: "{{external_eth}}"
 enable_aodh: "yes"
 enable_ceilometer: "yes"
-enable_cinder: "yes"
-enable_cinder_backup: "yes"
-enable_cinder_backend_lvm: "yes"
+enable_cinder: "no"
+enable_cinder_backup: "no"
+enable_cinder_backend_lvm: "no"
 enable_cloudkitty: "yes"
 enable_gnocchi: "yes"
 enable_gnocchi_statsd: "yes"
@@ -66,7 +66,7 @@ enable_neutron_metering: "yes"
 enable_nova_ssh: "yes"
 rabbitmq_enable_tls: "yes"
 # Valid options are [ qemu, kvm, vmware ]
-nova_compute_virt_type: "kvm"
+nova_compute_virt_type: "qemu"
 enable_collectd: "yes"
 cinder_volume_group: "{{cinder_volume_name}}"
 ###################################3
