@@ -27,6 +27,9 @@ cinder_volume_name: cinder-volume
 # If you have only one controller and any no. of compute nodes, choose set [all_in_one: true]
 all_in_one: true
 multinode: false
+globals_template:
+  - globals-cloudkitty
+  #-
 
 # Interface and IP related vars
 # System must have 4 interfaces [eth{0..3}]
@@ -52,23 +55,20 @@ network_interface: "{{ctrlplane_eth}}"
 storage_interface: "{{data_eth}}"
 tunnel_interface: "{{data_eth}}"
 neutron_external_interface: "{{external_eth}}"
-enable_aodh: "yes"
-enable_ceilometer: "yes"
-enable_cinder: "no"
-enable_cinder_backup: "no"
-enable_cinder_backend_lvm: "no"
-enable_cloudkitty: "yes"
-enable_gnocchi: "yes"
-enable_gnocchi_statsd: "yes"
 enable_neutron_qos: "yes"
 enable_neutron_provider_networks: "yes"
 enable_neutron_metering: "yes"
 enable_nova_ssh: "yes"
-rabbitmq_enable_tls: "yes"
 # Valid options are [ qemu, kvm, vmware ]
 nova_compute_virt_type: "qemu"
-enable_collectd: "yes"
+enable_fluentd: "no"
+# Storage
+enable_cinder: "no"
+enable_cinder_backup: "no"
+enable_cinder_backend_lvm: "no"
 cinder_volume_group: "{{cinder_volume_name}}"
+# SSL vars
+rabbitmq_enable_tls: "no"
 ###################################3
 
 

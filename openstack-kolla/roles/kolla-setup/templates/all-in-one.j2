@@ -1,28 +1,22 @@
 # These initial groups are the only groups required to be modified. The
 # additional groups are for more control of the environment.
 [control]
-{{controllers.hostname_01}} ansible_host={{controllers.ip_01}}
+localhost       ansible_connection=local
 
-
-[network:children]
-control
+[network]
+localhost       ansible_connection=local
 
 [compute]
-{{computes.hostname_01}} ansible_host={{computes.ip_01}}
+localhost       ansible_connection=local
 
-[storage:children]
-compute
+[storage]
+localhost       ansible_connection=local
 
 [monitoring]
-{{controllers.hostname_01}} ansible_host={{controllers.ip_01}}
+localhost       ansible_connection=local
 
 [deployment]
 localhost       ansible_connection=local
-
-[all:vars]
-ansible_user={{auth_info.user}}
-ansible_connection={{auth_info.connection}}
-ansible_ssh_privite_key_file={{auth_info.key_path}}
 
 # You can explicitly specify which hosts run each project by updating the
 # groups in the sections below. Common services are grouped together.
@@ -49,7 +43,6 @@ compute
 
 [baremetal:children]
 control
-compute
 
 [tls-backend:children]
 control

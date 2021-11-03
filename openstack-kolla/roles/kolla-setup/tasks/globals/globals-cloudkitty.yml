@@ -1,0 +1,46 @@
+- name: Set facts to control openstack projects
+  set_fact:
+    enable_aodh: "no"
+    enable_ceilometer: "yes"
+    enable_cloudkitty: "yes"
+    enable_gnocchi: "yes"
+    enable_gnocchi_statsd: "yes"
+    enable_collectd: "no"
+    enable_haproxy: "no"
+
+- name: Copy build specific vars in globals.yml
+  blockinfile:
+    path: /etc/kolla/globals.yml
+    block: |
+      node_custom_config: "{{node_custom_config}}"
+      docker_namespace: "{{docker_namespace}}"
+      openstack_region_name: "{{openstack_region_name}}"
+      kolla_base_distro: "{{ansible_distribution|lower}}"
+      kolla_install_type: "{{kolla_install_type}}"
+      openstack_release: "{{openstack_release}}"
+      kolla_internal_vip_address: "{{ansible_eth1.ipv4.address}}"
+      network_interface: "{{ctrlplane_eth}}"
+      storage_interface: "{{data_eth}}"
+      tunnel_interface: "{{data_eth}}"
+      neutron_external_interface: "{{external_eth}}"
+      enable_aodh: "{{enable_aodh}}"
+      enable_ceilometer: "{{enable_ceilometer}}"
+      enable_cinder: "{{enable_cinder}}"
+      enable_cinder_backup: "{{enable_cinder_backup}}"
+      enable_cinder_backend_lvm: "{{enable_cinder_backend_lvm}}"
+      enable_cloudkitty: "{{enable_cloudkitty}}"
+      enable_gnocchi: "{{enable_gnocchi}}"
+      enable_gnocchi_statsd: "{{enable_gnocchi_statsd}}"
+      enable_neutron_qos: "{{enable_neutron_qos}}"
+      enable_neutron_provider_networks: "{{enable_neutron_provider_networks}}"
+      enable_neutron_metering: "{{enable_neutron_metering}}"
+      enable_nova_ssh: "{{enable_nova_ssh}}"
+      rabbitmq_enable_tls: "{{rabbitmq_enable_tls}}"
+      # Valid options are [ qemu, kvm, vmware ]
+      nova_compute_virt_type: "{{nova_compute_virt_type}}"
+      enable_collectd: "{{enable_collectd}}"
+      cinder_volume_group: "{{cinder_volume_group}}"
+      enable_fluentd: "{{enable_fluentd}}"
+      enable_haproxy: "{{enable_haproxy}}"
+    insertafter: '^#\sCustom\schanges\smanaged\sby\sAnsible'
+    state: present
