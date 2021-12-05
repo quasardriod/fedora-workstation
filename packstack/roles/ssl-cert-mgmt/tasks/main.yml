@@ -1,0 +1,22 @@
+---
+
+- name: Remove /root/openstack-ssl-certs
+  file:
+    path: /root/openstack-ssl-certs
+    state: absent
+    
+- name: Create dir /root/openstack-ssl-certs
+  file:
+    path: /root/openstack-ssl-certs
+    state: directory
+
+- name: Copy script on target machine
+  copy:
+    src: openstack-certs-pem.sh
+    dest: /root/openstack-ssl-certs/
+    mode: 0755
+
+- name: Template out openssl conf
+  template:
+    src: openssl.j2
+    dest: /root/openstack-ssl-certs/openssl.cnf

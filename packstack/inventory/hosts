@@ -1,7 +1,7 @@
 # packstack node will act as controller and compute
 
 [controllers]
-os-ctrl01 ansible_host=192.168.10.235
+os-ctrl01 ansible_host=192.168.20.121
 
 [computes]
 os-com01 ansible_host=192.168.10.43

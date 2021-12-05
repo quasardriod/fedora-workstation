@@ -5,6 +5,8 @@
 - include_tasks: vconsole.yml
   when: ansible_system_vendor is match('QEMU')
 
+- include_tasks: disable-ipv6.yml
+
 - include_tasks: disable-bios-name.yml
   when: ansible_default_ipv4.alias is not match('eth0')
 

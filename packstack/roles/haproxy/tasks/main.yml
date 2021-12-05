@@ -1,0 +1,43 @@
+---
+
+- name: Install haproxy pkg
+  package:
+    name: haproxy
+    state: latest
+
+- name: Create dir /etc/pki/haproxy
+  file:
+    path: /etc/pki/haproxy
+    state: directory
+
+- name: Copy ssl certs
+  copy:
+    src: "ssl-certs/{{item}}"
+    dest: /etc/pki/haproxy/
+  with_items:
+    - "server-key.pem"
+    - "server-cert.pem"
+    - "ca-cert.pem"
+
+# created using cat server-cert.pem server-key.pem > haproxy.pem
+#- name: copy haproxy.pem
+#  copy:
+#    src: ssl-certs/haproxy.pem
+#    dest: /etc/pki/haproxy/
+
+- name: Copy haproxy logging config
+  copy:
+    src: 99-haproxy.conf
+    dest: /etc/rsyslog.d/
+  notify: restart_rsyslog
+
+- name: Copy haproxy config template
+  template:
+    src: haproxy.j2
+    dest: /etc/haproxy/haproxy.cfg
+    backup: yes
+
+- name: Restart haproxy
+  systemd:
+    name: haproxy
+    state: restarted

@@ -27,7 +27,7 @@ Deploy OpenStack proof of concept with one host `controller + compute` node in v
 
 4. Setup OpenStack host
 ```bash
-ansible-playbook -i inventory/hosts packstack.yml --tags="pre-setup,install-openstack"
+ansible-playbook -i inventory/hosts packstack.yml
 ```
 
 5. Connect to OpenStack server over ssh and run below command to install OpenStack

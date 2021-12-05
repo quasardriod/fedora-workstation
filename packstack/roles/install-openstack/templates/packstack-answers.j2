@@ -244,27 +244,27 @@ CONFIG_SSL_CERT_DIR=~/packstackca/
 
 # Specify 'y' if you want Packstack to pregenerate the CA
 # Certificate.
-CONFIG_SSL_CACERT_SELFSIGN=y
+CONFIG_SSL_CACERT_SELFSIGN={{self_signed_ca}}
 
 # Enter the ssl certificates subject country.
-CONFIG_SSL_CERT_SUBJECT_C=--
+CONFIG_SSL_CERT_SUBJECT_C={{ssl_cert_input.CONFIG_SSL_CERT_SUBJECT_C}}
 
 # Enter the ssl certificates subject state.
-CONFIG_SSL_CERT_SUBJECT_ST=State
+CONFIG_SSL_CERT_SUBJECT_ST={{ssl_cert_input.CONFIG_SSL_CERT_SUBJECT_ST}}
 
 # Enter the ssl certificates subject location.
-CONFIG_SSL_CERT_SUBJECT_L=City
+CONFIG_SSL_CERT_SUBJECT_L={{ssl_cert_input.CONFIG_SSL_CERT_SUBJECT_L}}
 
 # Enter the ssl certificates subject organization.
-CONFIG_SSL_CERT_SUBJECT_O=openstack
+CONFIG_SSL_CERT_SUBJECT_O={{ssl_cert_input.CONFIG_SSL_CERT_SUBJECT_O}}
 
 # Enter the ssl certificates subject organizational unit.
-CONFIG_SSL_CERT_SUBJECT_OU=packstack
+CONFIG_SSL_CERT_SUBJECT_OU={{ssl_cert_input.CONFIG_SSL_CERT_SUBJECT_OU}}
 
 # Enter the ssl certificates subject common name.
-CONFIG_SSL_CERT_SUBJECT_CN=packstack
+CONFIG_SSL_CERT_SUBJECT_CN={{ssl_cert_input.CONFIG_SSL_CERT_SUBJECT_CN}}
 
-CONFIG_SSL_CERT_SUBJECT_MAIL=admin@packstack
+CONFIG_SSL_CERT_SUBJECT_MAIL={{ssl_cert_input.CONFIG_SSL_CERT_SUBJECT_MAIL}}
 
 # Service to be used as the AMQP broker. Allowed values are: rabbitmq
 # ['rabbitmq']
@@ -274,7 +274,7 @@ CONFIG_AMQP_BACKEND=rabbitmq
 CONFIG_AMQP_HOST={{controller_hosts}}
 
 # Specify 'y' to enable SSL for the AMQP service. ['y', 'n']
-CONFIG_AMQP_ENABLE_SSL=n
+CONFIG_AMQP_ENABLE_SSL={{component_ssl.CONFIG_AMQP_ENABLE_SSL}}
 
 # Specify 'y' to enable authentication for the AMQP service. ['y',
 # 'n']
@@ -541,7 +541,7 @@ CONFIG_CINDER_BACKEND=lvm
 # proof-of-concept installation of the Block Storage service (a file-
 # backed volume group is not suitable for production usage). ['y',
 # 'n']
-CONFIG_CINDER_VOLUMES_CREATE=y
+CONFIG_CINDER_VOLUMES_CREATE=n
 
 # Specify a custom name for the lvm cinder volume group
 CONFIG_CINDER_VOLUME_NAME=cinder-volumes
@@ -843,7 +843,8 @@ CONFIG_NEUTRON_LB_INTERFACE_MAPPINGS=
 # Networking Open vSwitch plugin. Each tuple in the list must be in
 # the format <physical_network>:<ovs_bridge>. Example: physnet1:br-
 # eth1,physnet2:br-eth2,physnet3:br-eth3
-CONFIG_NEUTRON_OVS_BRIDGE_MAPPINGS=physnet1:br-tenant,extnet:br-ex
+CONFIG_NEUTRON_OVS_BRIDGE_MAPPINGS=extnet:br-ex
+#CONFIG_NEUTRON_OVS_BRIDGE_MAPPINGS=physnet1:br-tenant,extnet:br-ex
 
 # Comma-separated list of colon-separated Open vSwitch
 # <bridge>:<interface> pairs. The interface will be added to the
@@ -854,7 +855,8 @@ CONFIG_NEUTRON_OVS_BRIDGE_MAPPINGS=physnet1:br-tenant,extnet:br-ex
 # issuing the following command: packstack --allinone --os-neutron-
 # ovs-bridge-mappings=ext-net:br-ex --os-neutron-ovs-bridge-
 # interfaces=br-ex:eth0
-CONFIG_NEUTRON_OVS_BRIDGE_IFACES=br-tenant:eth1,br-ex:eth0
+CONFIG_NEUTRON_OVS_BRIDGE_IFACES=br-ex:eth0
+#CONFIG_NEUTRON_OVS_BRIDGE_IFACES=br-tenant:eth1,br-ex:eth0
 
 # Comma-separated list of Open vSwitch bridges that must be created
 # and connected to interfaces in compute nodes when flat or vlan type
@@ -864,7 +866,8 @@ CONFIG_NEUTRON_OVS_BRIDGE_IFACES=br-tenant:eth1,br-ex:eth0
 # compute=br-vlan --os-neutron-ovs-bridge-mappings="extnet:br-
 # ex,physnet1:br-vlan" --os-neutron-ovs-bridge-interfaces="br-
 # ex:eth1,br-vlan:eth2"
-CONFIG_NEUTRON_OVS_BRIDGES_COMPUTE=br-tenant
+CONFIG_NEUTRON_OVS_BRIDGES_COMPUTE=
+#CONFIG_NEUTRON_OVS_BRIDGES_COMPUTE=br-tenant
 
 # Name of physical network used for external network when enabling
 # CONFIG_PROVISION_DEMO. Name must be one of the included in
@@ -1093,7 +1096,7 @@ CONFIG_MANILA_GLUSTERFS_PATH_TO_PRIVATE_KEY=
 CONFIG_MANILA_GLUSTERFS_GANESHA_SERVER_IP=
 
 # Specify 'y' to set up Horizon communication over https. ['y', 'n']
-CONFIG_HORIZON_SSL=n
+CONFIG_HORIZON_SSL={{component_ssl.CONFIG_HORIZON_SSL}}
 
 # Secret key to use for Horizon Secret Encryption Key.
 CONFIG_HORIZON_SECRET_KEY=db603f9472e641c384c93541657a2ec3

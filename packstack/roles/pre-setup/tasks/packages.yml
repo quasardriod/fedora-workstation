@@ -8,8 +8,9 @@
     name:
       - "{{openstack_repo}}"
       - vim
-      - ansible
+      - dhcp-client
     state: present
+    update_cache: yes
 
 - name: Update OS
   dnf:
