@@ -1,0 +1,73 @@
+- name: Create backup of glance API config
+  shell: cp /etc/glance/glance-api.conf /etc/glance/glance-api.conf-$(date +'%d%m%y_%H%M')
+  tags: glance
+
+- name: glance| Add Cert in glance config
+  lineinfile:
+    path: /etc/glance/glance-api.conf
+    regexp: 'cert_file='
+    line: 'cert_file = {{ssl_cert}}'
+    state: present
+    insertafter: '^\[DEFAULT]$'
+  notify: restart_glance
+  tags: glance
+
+- name: glance| Add CA Cert in glance config
+  lineinfile:
+    path: /etc/glance/glance-api.conf
+    regexp: 'ca_file='
+    line: 'ca_file = {{ca_cert}}'
+    state: present
+    insertafter: '^\[DEFAULT]$'
+  notify: restart_glance
+  tags: glance
+
+- name: glance| Add Key in glance config
+  lineinfile:
+    path: /etc/glance/glance-api.conf
+    regexp: 'key_file='
+    line: 'key_file = {{ssl_key}}'
+    state: present
+    insertafter: '^\[DEFAULT]$'
+  notify: restart_glance
+  tags: glance
+
+- name: glance | Update www_authenticate_uri in keystone auth url
+  lineinfile:
+    path: /etc/glance/glance-api.conf
+    regexp: 'www_authenticate_uri='
+    line: 'www_authenticate_uri=https://{{ansible_fqdn}}:5000/v3'
+    state: present
+  notify: restart_glance
+  tags: glance
+
+
+- name: glance | Update auth_url in keystone auth url
+  lineinfile:
+    path: /etc/glance/glance-api.conf
+    regexp: 'auth_url='
+    line: 'auth_url=https://{{ansible_fqdn}}:5000'
+    state: present
+  notify: restart_glance
+  tags: glance
+
+- name: glance | Create https endpoint
+  shell: |
+    source {{rc_file}};
+    if ! openstack endpoint list --interface {{item}} --service image|egrep -q "https://{{ansible_fqdn}}";then
+      openstack endpoint create --region {{region}} \
+        image {{item}} https://{{ansible_fqdn}}:9292
+    fi
+  with_items: "{{endpoint_type}}"
+  tags: glance
+
+- name: glance | Delete http endpoint
+  shell: |
+    source {{rc_file}};
+    # Get http endpoint id
+    endpoint_id=$(openstack endpoint list --service glance --interface {{item}}|egrep "http:"|awk '{print $2}')
+    if [ ! -z $endpoint_id ];then
+      openstack endpoint delete $endpoint_id
+    fi
+  with_items: "{{endpoint_type}}"
+  tags: glance

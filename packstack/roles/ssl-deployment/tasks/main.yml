@@ -1,0 +1,7 @@
+---
+
+- include_tasks: keystone.yml
+  tags: keystone
+
+- include_tasks: glance.yml
+  tags: glance

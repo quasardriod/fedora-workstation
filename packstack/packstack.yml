@@ -121,3 +121,7 @@
     tags:
       - sslcert
       - ssl-cert-mgmt
+
+  - role: ssl-deployment
+    tags:
+      - ssl-deployment
