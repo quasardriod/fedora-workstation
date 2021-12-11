@@ -1,0 +1,16 @@
+---
+
+- name: Install openstack repo
+  dnf:
+    name: "{{openstack_repo}}"
+    state: present
+
+- name: Install openstack client pkgs
+  dnf:
+    name: python3-openstackclient
+    state: present
+
+- name: Copy openstackrc file
+  template:
+    src: openstackrc.j2
+    dest: /tmp/openstackrc

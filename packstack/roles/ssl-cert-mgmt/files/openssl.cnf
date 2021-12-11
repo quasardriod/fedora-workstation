@@ -36,7 +36,7 @@ system_default = crypto_policy
 
 [ crypto_policy ]
 
-.include = /etc/crypto-policies/back-ends/opensslcnf.config
+.include /etc/crypto-policies/back-ends/opensslcnf.config
 
 [ new_oids ]
 
@@ -58,8 +58,7 @@ default_ca	= CA_default		# The default ca section
 ####################################################################
 [ CA_default ]
 
-#dir		= /etc/pki/CA		# Where everything is kept
-dir		= /home/sumit/Public/sumit-git/fedora-workstation/packstack/roles/enable-ssl/files/ssl/root/ca		# Where everything is kept
+dir		= /etc/pki/CA		# Where everything is kept
 certs		= $dir/certs		# Where the issued certs are kept
 crl_dir		= $dir/crl		# Where the issued crl are kept
 database	= $dir/index.txt	# database index file.
@@ -142,16 +141,16 @@ x509_extensions	= v3_ca	# The extensions to add to the self signed cert
 # WARNING: ancient versions of Netscape crash on BMPStrings or UTF8Strings.
 string_mask = utf8only
 
-# req_extensions = v3_req # The extensions to add to a certificate request
+req_extensions = v3_req # The extensions to add to a certificate request
 
 [ req_distinguished_name ]
 countryName			= Country Name (2 letter code)
-countryName_default		= XX
+countryName_default		= IN
 countryName_min			= 2
 countryName_max			= 2
 
 stateOrProvinceName		= State or Province Name (full name)
-#stateOrProvinceName_default	= Default Province
+stateOrProvinceName_default	= Karanataka
 
 localityName			= Locality Name (eg, city)
 localityName_default		= Default City
@@ -241,7 +240,6 @@ authorityKeyIdentifier=keyid,issuer
 
 basicConstraints = CA:FALSE
 keyUsage = nonRepudiation, digitalSignature, keyEncipherment
-subjectAltName = DNS:os-ctrl01.quasarstack.com
 
 [ v3_ca ]
 
@@ -368,5 +366,3 @@ ess_cert_id_chain	= no	# Must the ESS cert id chain be included?
 				# (optional, default: no)
 ess_cert_id_alg		= sha256	# algorithm to compute certificate
 				# identifier (optional, default: sha1)
-[ server_cert ]
-subjectAltName = subjectAltName = DNS:os-ctrl01.quasarstack.com

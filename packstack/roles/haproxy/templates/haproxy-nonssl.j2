@@ -1,0 +1,117 @@
+#---------------------------------------------------------------------
+# Managed using Ansible
+# Haproxy to provide loadbalancing  capability for OpenStack Services
+#---------------------------------------------------------------------
+
+#---------------------------------------------------------------------
+# Global settings
+#---------------------------------------------------------------------
+global
+    # to have these messages end up in /var/log/haproxy.log you will
+    # need to:
+    #
+    # 1) configure syslog to accept network log events.  This is done
+    #    by adding the '-r' option to the SYSLOGD_OPTIONS in
+    #    /etc/sysconfig/syslog
+    #
+    # 2) configure local2 events to go to the /var/log/haproxy.log
+    #   file. A line like the following can be added to
+    #   /etc/sysconfig/syslog
+    #
+    #    local2.*                       /var/log/haproxy.log
+    #
+    #log         127.0.0.1 local2
+    log         /dev/log local0 debug
+
+    chroot      /var/lib/haproxy
+    pidfile     /var/run/haproxy.pid
+    maxconn     4000
+    user        haproxy
+    group       haproxy
+    daemon
+
+    # turn on stats unix socket
+    stats socket /var/lib/haproxy/stats
+
+    # utilize system-wide crypto-policies
+    ssl-default-bind-ciphers PROFILE=SYSTEM
+    ssl-default-server-ciphers PROFILE=SYSTEM
+
+#---------------------------------------------------------------------
+# common defaults that all the 'listen' and 'backend' sections will
+# use if not designated in their block
+#---------------------------------------------------------------------
+defaults
+    mode                    http
+    log                     global
+    option                  httplog
+    option                  dontlognull
+    option http-server-close
+    option forwardfor       except 127.0.0.0/8
+    option                  redispatch
+    retries                 3
+    timeout http-request    10s
+    timeout queue           1m
+    timeout connect         10s
+    timeout client          1m
+    timeout server          1m
+    timeout http-keep-alive 10s
+    timeout check           10s
+    maxconn                 3000
+
+#---------- Keystone ---------------
+listen keystone
+  bind {{haproxy_vip}}:5000
+  balance  source
+  option  tcpka
+  option  httpchk
+  option  tcplog
+  server {{os_controller}} {{os_controller_ip}}:5000 check inter 2000 rise 2 fall 5
+
+listen glance
+  bind {{haproxy_vip}}:9292
+  balance  source
+  option  tcpka
+  option  httpchk
+  option  tcplog
+  server {{os_controller}} {{os_controller_ip}}:9292 check inter 2000 rise 2 fall 5
+
+listen nova
+  bind {{haproxy_vip}}:8774
+  balance  source
+  option  tcpka
+  option  httpchk
+  option  tcplog
+  server {{os_controller}} {{os_controller_ip}}:8774 check inter 2000 rise 2 fall 5
+
+listen placement
+  bind {{haproxy_vip}}:8778
+  balance  source
+  option  tcpka
+  option  httpchk
+  option  tcplog
+  server {{os_controller}} {{os_controller_ip}}:8778 check inter 2000 rise 2 fall 5
+
+listen neutron
+  bind {{haproxy_vip}}:9696
+  balance  source
+  option  tcpka
+  option  httpchk
+  option  tcplog
+  server {{os_controller}} {{os_controller_ip}}:9696 check inter 2000 rise 2 fall 5
+
+listen cinderv3
+  bind {{haproxy_vip}}:8776
+  balance  source
+  option  tcpka
+  option  httpchk
+  option  tcplog
+  server {{os_controller}} {{os_controller_ip}}:8776 check inter 2000 rise 2 fall 5
+
+listen manila
+  bind {{haproxy_vip}}:8786
+  balance  source
+  option  tcpka
+  option  httpchk
+  option  tcplog
+  server {{os_controller}} {{os_controller_ip}}:8786 check inter 2000 rise 2 fall 5

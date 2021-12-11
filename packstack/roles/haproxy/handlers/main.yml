@@ -1,4 +1,4 @@
-- name: restart_rsyslog
+- name: restart_haproxy
   systemd:
-    name: rsyslog
+    name: haproxy
     state: restarted

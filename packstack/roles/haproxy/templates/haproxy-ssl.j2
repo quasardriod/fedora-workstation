@@ -36,6 +36,7 @@ global
     # utilize system-wide crypto-policies
     ssl-default-bind-ciphers PROFILE=SYSTEM
     ssl-default-server-ciphers PROFILE=SYSTEM
+    ssl-dh-param-file {{dhparam_file}}
 
 #---------------------------------------------------------------------
 # common defaults that all the 'listen' and 'backend' sections will
@@ -59,12 +60,76 @@ defaults
     timeout check           10s
     maxconn                 3000
 
-#---------- Keystone ---------------
-frontend keystone
-  mode            http
-  bind            {{ansible_host}}:5443 ssl crt /etc/pki/haproxy/haproxy.pem
-  default_backend keystone-api
+listen haproxy.stats
+  bind {{haproxy_vip}}:1993
+  mode http
+  stats enable
+  stats uri /
+  stats auth admin:redhat
 
-backend keystone-api
-  mode   http
-  server keystone {{ansible_host}}:5000 check
+#---------- Keystone ---------------
+listen keystone
+  bind {{haproxy_vip}}:5000 ssl crt {{haproxy_ssl_cert}} ssl-min-ver TLSv1.2
+#  bind {{haproxy_vip}}:5000 ssl crt {{haproxy_ssl_cert}} verify required ca-file {{haproxy_ca_cert}}
+  http-request set-header X-Forwarded-Proto https if { ssl_fc }
+  http-request redirect scheme https unless { ssl_fc }
+  balance  source
+  option  tcpka
+  option  httpchk
+  option  tcplog
+  mode http
+  server {{os_controller}} {{os_controller_ip}}:5000 check inter 2000 rise 2 fall 5
+
+listen glance
+  bind {{haproxy_vip}}:9292
+  balance  source
+  option  tcpka
+  option  httpchk
+  option  tcplog
+  mode http
+  server {{os_controller}} {{os_controller_ip}}:9292 check inter 2000 rise 2 fall 5
+
+listen nova
+  bind {{haproxy_vip}}:8774
+  balance  source
+  option  tcpka
+  option  httpchk
+  option  tcplog
+  mode http
+  server {{os_controller}} {{os_controller_ip}}:8774 check inter 2000 rise 2 fall 5
+
+listen placement
+  bind {{haproxy_vip}}:8778
+  balance  source
+  option  tcpka
+  option  httpchk
+  option  tcplog
+  mode http
+  server {{os_controller}} {{os_controller_ip}}:8778 check inter 2000 rise 2 fall 5
+
+listen neutron
+  bind {{haproxy_vip}}:9696
+  balance  source
+  option  tcpka
+  option  httpchk
+  option  tcplog
+  mode http
+  server {{os_controller}} {{os_controller_ip}}:9696 check inter 2000 rise 2 fall 5
+
+listen cinderv3
+  bind {{haproxy_vip}}:8776
+  balance  source
+  option  tcpka
+  option  httpchk
+  option  tcplog
+  mode http
+  server {{os_controller}} {{os_controller_ip}}:8776 check inter 2000 rise 2 fall 5
+
+listen manila
+  bind {{haproxy_vip}}:8786
+  balance  source
+  option  tcpka
+  option  httpchk
+  option  tcplog
+  mode http
+  server {{os_controller}} {{os_controller_ip}}:8786 check inter 2000 rise 2 fall 5

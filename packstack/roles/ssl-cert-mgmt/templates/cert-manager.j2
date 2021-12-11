@@ -74,19 +74,17 @@ server_certs(){
 	echo "Verfy Server certs with CA"
 	openssl verify -CAfile $ca_cert $server_cert
 
-	cp $ca_cert /etc/pki/ca-trust/source/anchors/
-	update-ca-trust extract
+#	cp $ca_cert /etc/pki/ca-trust/source/anchors/
+#	update-ca-trust extract
 
 	echo
 	echo "Remove passpharse from ssl key"
 	openssl rsa -in $server_key -out nopassphrase.key
 
 	echo "Combine server certificate and key"
-	cat $server_cert nopassphrase.key > $combined_cert
-	rm -rf nopassphrase.key
-
+	cat $server_cert $server_key > $combined_cert
+	#cat $server_cert nopassphrase.key > $combined_cert
 }
 
 ca_certs
-
 server_certs

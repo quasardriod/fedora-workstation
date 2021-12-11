@@ -1,0 +1,11 @@
+ssl_cert_input:
+  CONFIG_SSL_CERT_SUBJECT_C: IN
+  CONFIG_SSL_CERT_SUBJECT_ST: KA
+  CONFIG_SSL_CERT_SUBJECT_L: Bangalore
+  CONFIG_SSL_CERT_SUBJECT_O: "QuasarStack"
+  CONFIG_SSL_CERT_SUBJECT_OU: "Openstack Engineering"
+  CONFIG_SSL_CERT_SUBJECT_CN: quasar.com
+  CONFIG_SSL_CERT_SUBJECT_MAIL: "linuxengineering@quasar.com"
+
+ca_cert_input: "/C={{ssl_cert_input.CONFIG_SSL_CERT_SUBJECT_C}}/ST={{ssl_cert_input.CONFIG_SSL_CERT_SUBJECT_ST}}/L={{ssl_cert_input.CONFIG_SSL_CERT_SUBJECT_L}}/O={{ssl_cert_input.CONFIG_SSL_CERT_SUBJECT_O}}/OU={{ssl_cert_input.CONFIG_SSL_CERT_SUBJECT_OU}}/CN={{ssl_cert_input.CONFIG_SSL_CERT_SUBJECT_CN}}/emailAddress={{ssl_cert_input.CONFIG_SSL_CERT_SUBJECT_MAIL}}"
+server_csr_input: "/C={{ssl_cert_input.CONFIG_SSL_CERT_SUBJECT_C}}/ST={{ssl_cert_input.CONFIG_SSL_CERT_SUBJECT_ST}}/L={{ssl_cert_input.CONFIG_SSL_CERT_SUBJECT_L}}/O={{ssl_cert_input.CONFIG_SSL_CERT_SUBJECT_O}}/OU={{ssl_cert_input.CONFIG_SSL_CERT_SUBJECT_OU}}/CN={{ssl_cert_input.CONFIG_SSL_CERT_SUBJECT_CN}}/emailAddress={{ssl_cert_input.CONFIG_SSL_CERT_SUBJECT_MAIL}}"

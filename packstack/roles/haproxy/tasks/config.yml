@@ -1,0 +1,30 @@
+---
+
+- name: Set fact haproxy_vip
+  set_fact:
+    haproxy_vip: "{{ansible_host}}"
+
+- name: Get stat of {{dhparam_file}}
+  stat:
+    path: "{{dhparam_file}}"
+  register: dhparam
+
+- name: Create "{{dhparam_file}}"
+  shell: openssl dhparam -out {{dhparam_file}} 2048
+  when: not dhparam.stat.exists
+
+- name: Copy haproxy nonssl config template
+  template:
+    src: haproxy-nonssl.j2
+    dest: /etc/haproxy/haproxy.cfg
+    backup: yes
+  notify: restart_haproxy
+  when: not haproxy_ssl|bool
+
+- name: Copy haproxy ssl config template
+  template:
+    src: haproxy-ssl.j2
+    dest: /etc/haproxy/haproxy.cfg
+    backup: yes
+  notify: restart_haproxy
+  when: haproxy_ssl|bool

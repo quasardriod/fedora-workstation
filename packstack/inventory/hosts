@@ -10,6 +10,13 @@ os-com01 ansible_host=192.168.10.43
 controllers
 #computes
 
+[haproxy]
+# sdc: star dust cloud
+quasarsdc  ansible_host=192.168.20.20
+
+[openstack_client]
+osclient ansible_host=192.168.20.254
+
 [all:vars]
 ansible_user=root
 ansible_connection=ssh

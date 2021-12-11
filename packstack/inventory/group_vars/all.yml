@@ -5,6 +5,11 @@ controller_as_compute: true
 openstack_repo: centos-release-openstack-victoria
 domain: quasarstack.com
 
+os_controller: "openstack.quasar.com"
+os_controller_ip: "192.168.20.121"
+haproxy_host: "quasarsdc.quasarstack.com"
+haproxy_vip: 192.168.20.20
+
 # Enable(y) or Disable(n) additional projects
 openstack_projects:
   manila: y
@@ -49,12 +54,6 @@ component_ssl:
   CONFIG_HORIZON_SSL: y
 self_signed_ca: y
 
-
-ssl_cert_input:
-  CONFIG_SSL_CERT_SUBJECT_C: IN
-  CONFIG_SSL_CERT_SUBJECT_ST: KA
-  CONFIG_SSL_CERT_SUBJECT_L: Bangalore
-  CONFIG_SSL_CERT_SUBJECT_O: QuasarStack
-  CONFIG_SSL_CERT_SUBJECT_OU: CloudService
-  CONFIG_SSL_CERT_SUBJECT_CN: "{{ansible_fqdn}}"
-  CONFIG_SSL_CERT_SUBJECT_MAIL: "root@localhost"
+haproxy_ssl_cert: "/etc/pki/tls/haproxy/openstack.pem"
+haproxy_ca_cert: "/etc/pki/tls/haproxy/ca-cert.pem"
+haproxy_ssl: true

@@ -1,0 +1,1 @@
+dhparam_file: "/etc/haproxy/dhparams.pem"

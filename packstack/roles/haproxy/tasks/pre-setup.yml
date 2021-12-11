@@ -1,0 +1,13 @@
+---
+
+- name: Set hostname of HAproxy host
+  hostname:
+    name: "{{inventory_hostname}}.{{domain}}"
+
+- include_role:
+    name: ssl-cert-mgmt
+  when: haproxy_ssl|bool
+
+- name: Pause for 10 minutes and create certs
+  pause:
+    minutes: 10
