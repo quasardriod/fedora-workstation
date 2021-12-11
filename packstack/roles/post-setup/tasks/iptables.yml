@@ -1,0 +1,12 @@
+---
+
+- name: Check incoming connection rule for port 80
+  shell: iptables -L -n |egrep ^ACCEPT|egrep "\s80\s|\shttp\s"
+  register: input_80
+  ignore_errors: true
+
+- name: Add rule to allow incoming connection on 80
+  shell: |
+    iptables -A INPUT -p tcp --dports 80 -m comment --comment "001 horizon 80 incoming" -j ACCEPT
+    iptables-save > /etc/sysconfig/iptables
+  when: input_80.rc != 0

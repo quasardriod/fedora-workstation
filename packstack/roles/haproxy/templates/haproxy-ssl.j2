@@ -67,6 +67,18 @@ listen haproxy.stats
   stats uri /
   stats auth admin:redhat
 
+listen keystone
+    bind {{haproxy_vip}}:5000 ssl crt {{haproxy_ssl_cert}} ssl-min-ver TLSv1.2
+  #  bind {{haproxy_vip}}:5000 ssl crt {{haproxy_ssl_cert}} verify required ca-file {{haproxy_ca_cert}}
+    http-request set-header X-Forwarded-Proto https if { ssl_fc }
+    http-request redirect scheme https unless { ssl_fc }
+    balance  source
+    option  tcpka
+    option  httpchk
+    option  tcplog
+    mode http
+    server {{os_controller}} {{os_controller_ip}}:5000 check inter 2000 rise 2 fall 5
+
 #---------- Keystone ---------------
 listen keystone
   bind {{haproxy_vip}}:5000 ssl crt {{haproxy_ssl_cert}} ssl-min-ver TLSv1.2
