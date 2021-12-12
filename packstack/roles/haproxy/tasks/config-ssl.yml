@@ -4,6 +4,27 @@
   set_fact:
     haproxy_vip: "{{ansible_host}}"
 
+- name: Create dir {{haproxy_ssl_dir}}
+  file:
+    path: "{{haproxy_ssl_dir}}"
+    state: directory
+
+- name: Copy {{haproxy_ssl_cert}}
+  copy:
+    src: ssl/openstack.pem
+    dest: "{{haproxy_ssl_cert}}"
+    mode: 0644
+    owner: root
+    group: root
+
+- name: Copy {{haproxy_ca_cert}}
+  copy:
+    src: ssl/ca-cert.pem
+    dest: "{{haproxy_ca_cert}}"
+    mode: 0644
+    owner: root
+    group: root
+
 - name: Get stat of {{dhparam_file}}
   stat:
     path: "{{dhparam_file}}"

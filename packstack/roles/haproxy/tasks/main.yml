@@ -1,8 +1,8 @@
 ---
 
-#- include_tasks: pre-setup.yml
-#- include_tasks: install.yml
-- include_tasks: config.yml
+- include_tasks: pre-setup.yml
+- include_tasks: install.yml
+- include_tasks: config-ssl.yml
 #- include_tasks: proxy-client.yml
 
 #- name: Create dir /etc/pki/haproxy

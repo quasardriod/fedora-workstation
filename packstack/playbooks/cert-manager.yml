@@ -1,0 +1,13 @@
+---
+
+- hosts: haproxy
+  gather_facts: false
+
+  pre_tasks:
+  - name: Set facts for additional SAN records
+    set_fact:
+      alt_ip1: "{{haproxy_vip}}"
+      alt_name1: "{{haproxy_host}}"
+
+  roles:
+  - role: ssl-cert-mgmt

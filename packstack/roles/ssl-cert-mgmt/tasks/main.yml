@@ -2,7 +2,7 @@
 
 - name: Set fact for a dir to copy files
   set_fact:
-    cert_dir: "/var/tmp/{{ansible_hostname}}-certs"
+    cert_dir: "/tmp/{{ lookup('pipe', 'date +%Y%m%d') }}-certs"
 
 - name: Delete Dest dir
   file:
@@ -26,4 +26,4 @@
     dest: "{{cert_dir}}/openssl.cnf"
 
 - debug:
-    msg: "Login in target host and create ssl certs using cert-manager.sh script"
+    msg: "Script and openssl.cnf has been copied in {{cert_dir}}"

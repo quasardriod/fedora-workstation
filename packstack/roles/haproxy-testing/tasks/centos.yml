@@ -14,10 +14,19 @@
       - vim
     state: present
 
+- name: Copy CA cert
+  copy:
+    src: ssl/ca-cert.pem
+    dest: /root/
+    mode: 0644
+    owner: root
+    group: root
+
 - name: template out openrc
   template:
-    src: openstackrc.j2
+    src: openstackrc-ssl.j2
     dest: /root/openstackrc
+  when: haproxy_ssl|bool
 
 - name: Add {{haproxy_host}} entry in /etc/hosts
   lineinfile:
@@ -25,8 +34,3 @@
     regexp: '^{{haproxy_vip}}'
     line: '{{haproxy_vip}} {{haproxy_host}}'
     state: present
-
-- name: Copy CA cert
-  copy:
-    src: ca-cert.pem
-    dest: /root/

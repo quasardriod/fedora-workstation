@@ -145,32 +145,32 @@ req_extensions = v3_req # The extensions to add to a certificate request
 
 [ req_distinguished_name ]
 countryName			= Country Name (2 letter code)
-countryName_default		= {{ssl_cert_input.CONFIG_SSL_CERT_SUBJECT_C}}
+countryName_default		= {{ssl_sub_input.CONFIG_SSL_CERT_SUBJECT_C}}
 countryName_min			= 2
 countryName_max			= 2
 
 stateOrProvinceName		= State or Province Name (full name)
-stateOrProvinceName_default	= {{ssl_cert_input.CONFIG_SSL_CERT_SUBJECT_ST}}
+stateOrProvinceName_default	= {{ssl_sub_input.CONFIG_SSL_CERT_SUBJECT_ST}}
 
 localityName			= Locality Name (eg, city)
-localityName_default		= {{ssl_cert_input.CONFIG_SSL_CERT_SUBJECT_L}}
+localityName_default		= {{ssl_sub_input.CONFIG_SSL_CERT_SUBJECT_L}}
 
 organizationName		= Organization Name (eg, company)
-organizationName_default	= {{ssl_cert_input.CONFIG_SSL_CERT_SUBJECT_O}}
+organizationName_default	= {{ssl_sub_input.CONFIG_SSL_CERT_SUBJECT_O}}
 
 # we can do this but it is not needed normally :-)
 #1.organizationName		= Second Organization Name (eg, company)
 #1.organizationName_default	= World Wide Web Pty Ltd
 
 organizationalUnitName		= Organizational Unit Name (eg, section)
-organizationalUnitName_default	= {{ssl_cert_input.CONFIG_SSL_CERT_SUBJECT_OU}}
+organizationalUnitName_default	= {{ssl_sub_input.CONFIG_SSL_CERT_SUBJECT_OU}}
 
 commonName = Common Name
-commonName_default = {{ssl_cert_input.CONFIG_SSL_CERT_SUBJECT_CN}}
+commonName_default = {{ssl_sub_input.CONFIG_SSL_CERT_SUBJECT_CN}}
 commonName_max			= 64
 
 emailAddress			= Email Address
-emailAddress_default			= {{ssl_cert_input.CONFIG_SSL_CERT_SUBJECT_MAIL}}
+emailAddress_default			= {{ssl_sub_input.CONFIG_SSL_CERT_SUBJECT_MAIL}}
 emailAddress_max		= 64
 
 # SET-ex3			= SET extension number 3
@@ -245,9 +245,8 @@ keyUsage = nonRepudiation, digitalSignature, keyEncipherment
 subjectAltName = @alt_names
 
 [ alt_names ]
-IP.1 = {{ansible_host}}
-DNS.1 = {{ansible_fqdn}}
-DNS.2 = {{ansible_hostname}}
+IP.1 = {{alt_ip1}}
+DNS.1 = {{alt_name1}}
 
 [ v3_ca ]
 

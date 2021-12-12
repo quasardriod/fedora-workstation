@@ -5,7 +5,7 @@ controller_as_compute: true
 openstack_repo: centos-release-openstack-victoria
 domain: quasarstack.com
 
-os_controller: "openstack.quasar.com"
+os_controller: "openstack.quasarstack.com"
 os_controller_ip: "192.168.20.121"
 haproxy_host: "quasarsdc.quasarstack.com"
 haproxy_vip: 192.168.20.20
@@ -54,6 +54,7 @@ component_ssl:
   CONFIG_HORIZON_SSL: y
 self_signed_ca: y
 
-haproxy_ssl_cert: "/etc/pki/tls/haproxy/openstack.pem"
-haproxy_ca_cert: "/etc/pki/tls/haproxy/ca-cert.pem"
+haproxy_ssl_dir: "/etc/pki/tls/haproxy"
+haproxy_ssl_cert: "{{haproxy_ssl_dir}}/openstack.pem"
+haproxy_ca_cert: "{{haproxy_ssl_dir}}/ca-cert.pem"
 haproxy_ssl: true

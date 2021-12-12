@@ -5,6 +5,7 @@
     name:
       - haproxy
       - vim
+      - net-tools 
     state: latest
 
 - name: Get seboolean for haproxy_connect_any
