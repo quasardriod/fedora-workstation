@@ -5,14 +5,39 @@ controller_as_compute: true
 openstack_repo: centos-release-openstack-victoria
 domain: quasarstack.com
 
-os_controller: "openstack.quasarstack.com"
+# cert_location: [remote, local]
+cert_location: local
+
+os_controller: "openstack.{{domain}}"
 os_controller_ip: "192.168.20.121"
-haproxy_host: "quasarsdc.quasarstack.com"
-haproxy_vip: 192.168.20.20
+proxy_host: "quasarsdc.{{domain}}"
+proxy_vip: 192.168.20.20
+enable_ssl: true
+
+ssl_sub_input:
+  CONFIG_SSL_CERT_SUBJECT_C: IN
+  CONFIG_SSL_CERT_SUBJECT_ST: KA
+  CONFIG_SSL_CERT_SUBJECT_L: Bangalore
+  CONFIG_SSL_CERT_SUBJECT_O: "QuasarStack Ltd."
+  CONFIG_SSL_CERT_SUBJECT_OU: "Openstack Engineering"
+  CONFIG_SSL_CERT_SUBJECT_CN: "*.quasarstack.com"
+  CONFIG_SSL_CERT_SUBJECT_MAIL: "linuxengineering@quasarstack.com"
+
+ssl_dir: "/etc/pki/tls/openstack"
+server_cert: "server-cert.pem"
+server_cert_key: "server-key.pem"
+ca_cert: "ca-cert.pem"
+ca_key: "ca-key.pem"
+
+path_server_cert: "{{ssl_dir}}/{{server_cert}}"
+path_server_key: "{{ssl_dir}}/{{server_cert_key}}"
+path_ca_cert: "{{ssl_dir}}/{{ca_cert}}"
+path_ca_key: "{{ssl_dir}}/{{ca_key}}"
 
 # Enable(y) or Disable(n) additional projects
 openstack_projects:
-  manila: y
+  cinder: n
+  manila: n
   swift: n
   ceilometer: n
   aodh: n
@@ -48,13 +73,22 @@ openstack_pkgs:
   - openstack-placement-common
   - openstack-cinder
 
-# packstack install options
+# -------- packstack install options ---------------
 component_ssl:
   CONFIG_AMQP_ENABLE_SSL: y
   CONFIG_HORIZON_SSL: y
-self_signed_ca: y
+# Do not allow packstack to create own certs
+CONFIG_SSL_CACERT_SELFSIGN: n
+CONFIG_SSL_CACERT_FILE: "{{path_ca_cert}}"
+CONFIG_SSL_CACERT_KEY_FILE: "{{path_ca_key}}"
+CONFIG_VNC_SSL_CERT: "{{path_server_cert}}"
+CONFIG_VNC_SSL_KEY: "{{path_server_key}}"
+CONFIG_HORIZON_SSL_CERT: "{{path_server_cert}}"
+CONFIG_HORIZON_SSL_KEY: "{{path_server_key}}"
+CONFIG_HORIZON_SSL_CACERT: "{{path_ca_cert}}"
+#-----------------------------------------------
 
-haproxy_ssl_dir: "/etc/pki/tls/haproxy"
-haproxy_ssl_cert: "{{haproxy_ssl_dir}}/openstack.pem"
-haproxy_ca_cert: "{{haproxy_ssl_dir}}/ca-cert.pem"
+haproxy_ssl_dir: "{{ssl_dir}}"
+haproxy_ssl_combined_cert: "{{haproxy_ssl_dir}}/openstack.pem"
+haproxy_ca_cert: "{{path_ca_cert}}"
 haproxy_ssl: true

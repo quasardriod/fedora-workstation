@@ -1,8 +1,3 @@
-- name: set hostname
-  hostname:
-    name: "{{inventory_hostname}}.{{domain}}"
-    use: systemd
-
 - name: Add hostname entry in /etc/hosts
   lineinfile:
     path: /etc/hosts

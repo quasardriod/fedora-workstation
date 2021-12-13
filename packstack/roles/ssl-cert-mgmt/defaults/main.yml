@@ -4,8 +4,8 @@ ca_sub_input:
   CONFIG_SSL_CERT_SUBJECT_L: Bangalore
   CONFIG_SSL_CERT_SUBJECT_O: "QuasarStack Ltd."
   CONFIG_SSL_CERT_SUBJECT_OU: Cyber Security
-  CONFIG_SSL_CERT_SUBJECT_CN: quasar.com
-  CONFIG_SSL_CERT_SUBJECT_MAIL: "linuxengineering@quasar.com"
+  CONFIG_SSL_CERT_SUBJECT_CN: quasarstack.com
+  CONFIG_SSL_CERT_SUBJECT_MAIL: "linuxengineering@quasarstack.com"
 
 ca_cert_input: "/C={{ca_sub_input.CONFIG_SSL_CERT_SUBJECT_C}}/ST={{ca_sub_input.CONFIG_SSL_CERT_SUBJECT_ST}}/L={{ca_sub_input.CONFIG_SSL_CERT_SUBJECT_L}}/O={{ca_sub_input.CONFIG_SSL_CERT_SUBJECT_O}}/OU={{ca_sub_input.CONFIG_SSL_CERT_SUBJECT_OU}}/CN={{ca_sub_input.CONFIG_SSL_CERT_SUBJECT_CN}}/emailAddress={{ca_sub_input.CONFIG_SSL_CERT_SUBJECT_MAIL}}"
 
@@ -16,8 +16,8 @@ ssl_sub_input:
   CONFIG_SSL_CERT_SUBJECT_L: Bangalore
   CONFIG_SSL_CERT_SUBJECT_O: "QuasarStack Ltd."
   CONFIG_SSL_CERT_SUBJECT_OU: "Openstack Engineering"
-  CONFIG_SSL_CERT_SUBJECT_CN: "*.quasar.com"
-  CONFIG_SSL_CERT_SUBJECT_MAIL: "linuxengineering@quasar.com"
+  CONFIG_SSL_CERT_SUBJECT_CN: "*.quasarstack.com"
+  CONFIG_SSL_CERT_SUBJECT_MAIL: "linuxengineering@quasarstack.com"
 
 server_csr_input: "/C={{ssl_sub_input.CONFIG_SSL_CERT_SUBJECT_C}}/ST={{ssl_sub_input.CONFIG_SSL_CERT_SUBJECT_ST}}/L={{ssl_sub_input.CONFIG_SSL_CERT_SUBJECT_L}}/O={{ssl_sub_input.CONFIG_SSL_CERT_SUBJECT_O}}/OU={{ssl_sub_input.CONFIG_SSL_CERT_SUBJECT_OU}}/CN={{ssl_sub_input.CONFIG_SSL_CERT_SUBJECT_CN}}/emailAddress={{ssl_sub_input.CONFIG_SSL_CERT_SUBJECT_MAIL}}"
 

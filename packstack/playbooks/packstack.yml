@@ -113,15 +113,15 @@
     tags:
       - post-setup
 
-  - role: haproxy
-    tags:
-      - haproxy
+#  - role: haproxy
+#    tags:
+#      - haproxy
 
-  - role: ssl-cert-mgmt
-    tags:
-      - sslcert
-      - ssl-cert-mgmt
+#  - role: ssl-cert-mgmt
+#    tags:
+#      - sslcert
+#      - ssl-cert-mgmt
 
-  - role: ssl-deployment
-    tags:
-      - ssl-deployment
+#  - role: ssl-deployment
+#    tags:
+#      - ssl-deployment

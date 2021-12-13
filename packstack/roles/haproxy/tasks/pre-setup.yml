@@ -2,7 +2,7 @@
 
 - name: Set hostname of HAproxy host
   hostname:
-    name: "{{inventory_hostname}}.{{domain}}"
+    name: "{{proxy_host}}"
 
 - name: Stop firewalld service
   systemd:

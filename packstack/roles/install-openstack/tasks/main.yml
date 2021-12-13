@@ -1,8 +1,26 @@
+- name: set hostname
+  hostname:
+    name: "{{os_controller}}"
+    use: systemd
+
 - include_tasks: packages.yml
+
+- include_tasks: "ssl-cert-{{cert_location}}.yml"
 
 - name: Template out packstack answer file
   template:
     src: packstack-answers.j2
     dest: /root/packstack-answers.text
     mode: 0644
-  when: inventory_hostname is search('os-ctrl')
+  when:
+    - inventory_hostname is search('os-ctrl')
+    - not enable_ssl|bool
+
+- name: Template out packstack answer file with ssl
+  template:
+    src: packstack-answers-ssl.j2
+    dest: /root/packstack-answers.text
+    mode: 0644
+  when:
+    - inventory_hostname is search('os-ctrl')
+    - enable_ssl|bool

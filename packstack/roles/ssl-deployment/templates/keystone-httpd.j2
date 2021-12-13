@@ -4,7 +4,7 @@
 # ************************************
 #
 <VirtualHost *:5000>
-  ServerName os-ctrl01.quasarstack.com
+  ServerName {{os_controller}}
 
   ## Vhost docroot
   DocumentRoot "/var/www/cgi-bin/keystone"
@@ -20,14 +20,13 @@
   ServerAlias {{ansible_host}}
   ServerAlias {{ansible_fqdn}}
   ServerAlias {{ansible_hostname}}
-  ServerAlias localhost
 
   ## SSL directives
   SSLEngine on
   SSLVerifyClient none
-  SSLCertificateFile      "{{ssl_cert}}"
-  SSLCertificateKeyFile   "{{ssl_key}}"
-  SSLCACertificateFile    "{{ca_cert}}"
+  SSLCertificateFile      "{{path_server_cert}}"
+  SSLCertificateKeyFile   "{{path_server_key}}"
+  SSLCACertificateFile    "{{path_ca_cert}}"
 
 
   ## Logging

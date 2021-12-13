@@ -1,0 +1,61 @@
+---
+
+- name: Set facts for additional SAN records
+  set_fact:
+    alt_ip1: "{{os_controller_ip}}"
+    alt_name1: "{{os_controller}}"
+    alt_ip2: "{{proxy_vip}}"
+    alt_name2: "{{proxy_host}}"
+
+- name: Copy ssl script and openssl config file
+  include_role:
+    name: ssl-cert-mgmt
+
+- name: Take a pause and login in server, and create cert manually
+  pause:
+    minutes: 10
+    
+- name: Set fact for a dir to copy files
+  set_fact:
+    cert_dir: "/tmp/{{ lookup('pipe', 'date +%Y%m%d') }}-certs"
+
+- name: Create ssl cert dir
+  file:
+    path: "{{ssl_dir}}"
+    state: directory
+
+- name: Copy Server cert
+  copy:
+    src: "{{cert_dir}}/{{server_cert}}"
+    dest: "{{path_server_cert}}"
+    remote_src: yes
+    mode: 0644
+    owner: root
+    group: root
+
+- name: Copy Server cert key
+  copy:
+    src: "{{cert_dir}}/{{server_cert_key}}"
+    dest: "{{path_server_key}}"
+    remote_src: yes
+    mode: 0600
+    owner: root
+    group: root
+
+- name: Copy CA cert
+  copy:
+    src: "{{cert_dir}}/{{ca_cert}}"
+    dest: "{{path_ca_cert}}"
+    remote_src: yes
+    mode: 0644
+    owner: root
+    group: root
+
+- name: Copy CA cert key
+  copy:
+    src: "{{cert_dir}}/{{ca_key}}"
+    dest: "{{path_ca_key}}"
+    remote_src: yes
+    mode: 0600
+    owner: root
+    group: root

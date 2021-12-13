@@ -9,10 +9,10 @@
     path: "{{haproxy_ssl_dir}}"
     state: directory
 
-- name: Copy {{haproxy_ssl_cert}}
+- name: Copy {{haproxy_ssl_combined_cert}}
   copy:
     src: ssl/openstack.pem
-    dest: "{{haproxy_ssl_cert}}"
+    dest: "{{haproxy_ssl_combined_cert}}"
     mode: 0644
     owner: root
     group: root

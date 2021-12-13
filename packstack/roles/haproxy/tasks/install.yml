@@ -5,7 +5,7 @@
     name:
       - haproxy
       - vim
-      - net-tools 
+      - net-tools
     state: latest
 
 - name: Get seboolean for haproxy_connect_any
@@ -36,3 +36,4 @@
   systemd:
     name: haproxy
     state: started
+    enabled: yes

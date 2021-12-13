@@ -69,8 +69,12 @@ listen haproxy.stats
 
 #---------- Keystone ---------------
 listen keystone
-  bind {{haproxy_vip}}:5000 ssl crt {{haproxy_ssl_cert}} ssl-min-ver TLSv1.2
-#  bind {{haproxy_vip}}:5000 ssl crt {{haproxy_ssl_cert}} verify required ca-file {{haproxy_ca_cert}}
+  bind {{haproxy_vip}}:5000 ssl crt {{haproxy_ssl_combined_cert}} verify required ca-file {{haproxy_ca_cert}}
+  acl secure dst_port eq 5000
+  redirect scheme https if !{ ssl_fc }
+	rspadd Strict-Transport-Security:\ max-age=31536000;\ includeSubDomains;\ preload
+  rsprep ^Set-Cookie:\ (.*) Set-Cookie:\ \1;\ Secure if secure
+#  bind {{haproxy_vip}}:5000 ssl crt {{haproxy_ssl_combined_cert}} verify required ca-file {{haproxy_ca_cert}}
   http-request set-header X-Forwarded-Proto https if { ssl_fc }
   http-request redirect scheme https unless { ssl_fc }
   balance  source

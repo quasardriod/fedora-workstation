@@ -1,7 +1,14 @@
 ---
 
-- include_tasks: keystone.yml
-  tags: keystone
+#- include_tasks: pre-setup.yml
+#- include_tasks: httpd.yml
+#- include_tasks: ssl-certs.yml
 
-- include_tasks: glance.yml
-  tags: glance
+#- include_tasks: keystone.yml
+#  tags: keystone
+- name: Include role to setup openstack client
+  include_role:
+    name: haproxy-testing
+    tasks_from: main.yml
+#- include_tasks: glance.yml
+#  tags: glance

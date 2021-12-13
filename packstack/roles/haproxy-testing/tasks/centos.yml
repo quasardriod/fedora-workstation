@@ -28,9 +28,9 @@
     dest: /root/openstackrc
   when: haproxy_ssl|bool
 
-- name: Add {{haproxy_host}} entry in /etc/hosts
+- name: Add {{proxy_host}} entry in /etc/hosts
   lineinfile:
     path: /etc/hosts
-    regexp: '^{{haproxy_vip}}'
-    line: '{{haproxy_vip}} {{haproxy_host}}'
+    regexp: '^{{proxy_vip}}'
+    line: '{{proxy_vip}} {{proxy_host}}'
     state: present
