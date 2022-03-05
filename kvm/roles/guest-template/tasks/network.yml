@@ -1,7 +1,14 @@
 ---
+
+- name: Check if dhclient alredy running
+  shell: pgrep dhclient
+  register: _check_dhc
+  ignore_errors: true
+
 - name: Run dhclient command
   command: dhclient
-  when: ansible_eth1.ipv4 is not defined
+  when: 
+    - _check_dhc.rc != 0
 
 - setup:
 
