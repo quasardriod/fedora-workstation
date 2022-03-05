@@ -1,0 +1,30 @@
+---
+
+- name: Install network-scripts package
+  dnf:
+    name: network-scripts
+    state: present
+
+- name: Stop and disable firewalld
+  service:
+    name: firewalld
+    state: started
+    enabled: yes
+
+- name: Stop and disable Network Manager
+  service:
+    name: NetworkManager
+    state: stopped
+    enabled: no
+
+- name: Start and enable legacy network service
+  service:
+    name: network
+    state: started
+    enabled: yes
+
+- name: Start and enable rsyslog
+  service:
+    name: rsyslog
+    state: started
+    enabled: yes

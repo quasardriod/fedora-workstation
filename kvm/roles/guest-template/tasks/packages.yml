@@ -1,0 +1,25 @@
+---
+
+- name: Enable power tools
+  command: dnf config-manager --enable powertools
+  args:
+    warn: false
+
+- name: Install openstack repo {{openstack_repo}}
+  dnf:
+    name:
+      - vim
+      - dhcp-client
+      - net-tools
+    state: present
+    update_cache: yes
+
+- name: Update OS
+  dnf:
+    name: "*"
+    state: latest
+
+- name: Install rsyslog
+  dnf:
+    name: rsyslog
+    state: present
