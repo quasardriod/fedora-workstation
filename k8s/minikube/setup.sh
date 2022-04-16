@@ -21,6 +21,8 @@ install_ansible(){
       if ! rpm -q ansible > /dev/null 2>&1;then
         echo "Error! ansible rpm not found" && exit
       fi
+    else
+      echo "Not a CentOS machine, skipping ansible installation"
     fi
   else
     echo "Ansible is already installed" && exit 0
@@ -36,15 +38,7 @@ k8s_tools(){
 }
 
 install_minikube(){
-  #echo
-  #echo "Download minikube binaries"
-  #ansible-playbook minikube.yml --tags="minikube"
-  echo
-  echo "Start minikube setup..."
-  echo
-  if dmidecode -t system|egrep -qw "\s+Manufacturer:\sQEMU";then
-    minikube start --driver=none
-  fi
+  ansible-playbook minikube.yml --tags="minikube"
 }
 
 build_image(){

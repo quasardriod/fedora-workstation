@@ -1,5 +1,9 @@
 ---
 
+- name: Set system host
+  hostname:
+    name: "{{inventory_hostname}}"
+    
 - name: Install rsyslog
   dnf:
     name: rsyslog
