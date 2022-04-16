@@ -1,0 +1,35 @@
+---
+
+- name: Install network-scripts package
+  dnf:
+    name: network-scripts
+    state: present
+  when: ansible_distribution is match('CentOS')
+
+- name: Stop and disable firewalld
+  service:
+    name: firewalld
+    state: started
+    enabled: yes
+  when: ansible_distribution is match('CentOS')
+
+- name: Stop and disable Network Manager
+  service:
+    name: NetworkManager
+    state: stopped
+    enabled: no
+  when: ansible_distribution is match('CentOS')
+
+- name: Start and enable legacy network service
+  service:
+    name: network
+    state: started
+    enabled: yes
+  when: ansible_distribution is match('CentOS')
+
+- name: Start and enable rsyslog
+  service:
+    name: rsyslog
+    state: started
+    enabled: yes
+  when: ansible_distribution is match('CentOS')

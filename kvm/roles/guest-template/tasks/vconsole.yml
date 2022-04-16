@@ -1,0 +1,45 @@
+---
+
+- name: Check 'console=tty0 console=ttyS0,115200' param in /etc/default/grub
+  shell: cat /etc/default/grub|egrep ^GRUB_CMDLINE_LINUX|egrep "console=tty0 console=ttyS0,115200"
+  register: _check_console_param
+  ignore_errors: true
+
+- block:
+  - name: Get current GRUB_CMDLINE_LINUX settings
+    shell: cat /etc/default/grub|egrep ^GRUB_CMDLINE_LINUX|cut -d'"' -f2
+    register: _current_grub_cmd
+
+  - debug:
+      var: _current_grub_cmd.stdout
+
+  - name: Set fact to switch to native interface names
+    set_fact:
+      _new_kernel_param: "{{_current_grub_cmd.stdout + ' console=tty0 console=ttyS0,115200'}}"
+
+  - debug:
+      var: _new_kernel_param
+
+  - name: Take backup of /etc/default/grub
+    copy:
+      src: /etc/default/grub
+      dest: /etc/default/grub-{{ansible_date_time.iso8601_basic_short}}
+      mode: 0644
+      owner: root
+      group: root
+      remote_src: yes
+
+  - name: Update /etc/default/grub with new kernel param
+    lineinfile:
+      path: /etc/default/grub
+      regexp: '^GRUB_CMDLINE_LINUX'
+      line: 'GRUB_CMDLINE_LINUX="{{_new_kernel_param}}"'
+
+  - name: Generate grub config
+    command: grub2-mkconfig -o /boot/grub2/grub.cfg
+
+  - name: Reboot host
+    reboot:
+      reboot_timeout: 600
+      test_command: "uptime"
+  when: _check_console_param.rc != 0

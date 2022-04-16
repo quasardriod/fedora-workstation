@@ -1,0 +1,31 @@
+---
+
+- name: Check if dhclient alredy running
+  shell: pgrep dhclient
+  register: _check_dhc
+  ignore_errors: true
+
+- name: Run dhclient command
+  command: dhclient
+  when: 
+    - _check_dhc.rc != 0
+
+- setup:
+
+- name: template out resolv.conf
+  template:
+    src: resolv.j2
+    dest: /etc/resolv.conf
+    mode: 0644
+    owner: root
+    group: root
+  notify: restart_network
+
+- name: template out eth0 config
+  template:
+    src: eth0.j2
+    dest: /etc/sysconfig/network-scripts/ifcfg-eth0
+    mode: 0644
+    owner: root
+    group: root
+  notify: restart_network

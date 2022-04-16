@@ -1,0 +1,5 @@
+centos8 ansible_host=192.168.10.94
+
+[all:vars]
+ansible_user=root
+ansible_password=redhat
