@@ -6,9 +6,11 @@
 - name: Install Additional packages
   dnf:
     name:
+      - curl
       - socat
       - tc
-    state: installed
+      - conntrack
+    state: latest
 
 - name: Get stat of /usr/local/bin/minikube
   stat:
@@ -33,3 +35,10 @@
   selinux:
     policy: targeted
     state: permissive
+
+- name: Install minikube
+  debug:
+    msg:
+      - "Connect over ssh and run below command to install minukube"
+      - "minikube start --driver=none"
+  when: ansible_system_vendor is match('QEMU')

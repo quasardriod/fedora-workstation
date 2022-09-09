@@ -1,0 +1,38 @@
+---
+
+- name: Create ssl cert dir
+  file:
+    path: "{{ssl_dir}}"
+    state: directory
+
+- name: Copy Server cert
+  copy:
+    src: "ssl/{{server_cert}}"
+    dest: "{{path_server_cert}}"
+    mode: 0644
+    owner: root
+    group: root
+
+- name: Copy Server cert key
+  copy:
+    src: "ssl/{{server_cert_key}}"
+    dest: "{{path_server_key}}"
+    mode: 0600
+    owner: root
+    group: root
+
+- name: Copy CA cert
+  copy:
+    src: "ssl/{{ca_cert}}"
+    dest: "{{path_ca_cert}}"
+    mode: 0644
+    owner: root
+    group: root
+
+- name: Copy CA cert key
+  copy:
+    src: "ssl/{{ca_key}}"
+    dest: "{{path_ca_key}}"
+    mode: 0600
+    owner: root
+    group: root

@@ -1,0 +1,25 @@
+---
+
+- include_tasks: packages.yml
+
+- include_tasks: services.yml
+
+- include_tasks: vconsole.yml
+  when: 
+    - ansible_system_vendor is match('QEMU')
+    - ansible_distribution is match('CentOS')
+
+- include_tasks: disable-ipv6.yml
+  when: 
+    - ansible_distribution is match('CentOS')
+
+
+- include_tasks: disable-bios-name.yml
+  when: 
+    - ansible_default_ipv4.alias is not match('eth0')
+    - ansible_distribution is match('CentOS')
+
+
+- include_tasks: network.yml
+  when: 
+    - ansible_distribution is match('CentOS')

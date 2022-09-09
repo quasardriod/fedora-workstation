@@ -1,0 +1,7 @@
+---
+
+- hosts: openstack_client
+  gather_facts: false
+
+  roles:
+  - role: haproxy-testing

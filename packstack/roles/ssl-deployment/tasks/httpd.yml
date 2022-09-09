@@ -1,0 +1,37 @@
+---
+
+- name: Install httpd package
+  dnf:
+    name:
+      - httpd
+      - mod_ssl
+      - net-tools
+      - vim
+    state: latest
+
+- name: Stop firewalld service
+  systemd:
+    name: firewalld
+    state: stopped
+    enabled: no
+
+- name: Disable selinux
+  lineinfile:
+    path: /etc/selinux/config
+    regexp: '^SELINUX='
+    line: 'SELINUX=disabled'
+    state: present
+  register: disable_selinux
+
+- name: Reboot host
+  reboot:
+    reboot_timeout: 600
+    test_command: uptime
+    connect_timeout: 10
+  when: disable_selinux is changed
+
+- name: Start httpd
+  systemd:
+    name: httpd
+    state: started
+    enabled: yes

@@ -1,12 +1,5 @@
 ---
 
-- name: Install curl
-  dnf:
-    name:
-      - curl
-      - conntrack
-    state: latest
-
 - name: Get /usr/local/bin/kubectl stat
   stat:
     path: /usr/local/bin/kubectl

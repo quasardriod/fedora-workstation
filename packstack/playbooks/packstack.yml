@@ -10,19 +10,27 @@
         - ansible_distribution is match('CentOS')
         - ansible_distribution_major_version == "8"
       fail_msg: "Target System must be CentOS 8"
+    tags:
+      - always
 
   - name: Set fact controller_hosts
     set_fact:
       controller_hosts: "{{ansible_default_ipv4.address}}"
     when: inventory_hostname is search('os-ctrl')
+    tags:
+      - always
 
   - name: Set fact compute_ips_list_file
     set_fact:
       compute_ips_list_file: "/tmp/compute_ips.yml"
+    tags:
+      - always
 
   - name: Create a {{compute_ips_list_file}} on localhost
     shell: echo "compute_ips:" > {{compute_ips_list_file}}
     delegate_to: localhost
+    tags:
+      - always
 
   - name: Append IPs of compute hosts (and controller) in compute_ips
     lineinfile:
@@ -31,6 +39,8 @@
       state: present
     when: controller_as_compute|bool
     delegate_to: localhost
+    tags:
+      - always
 
   - name: Append IPs of compute hosts in compute_ips
     lineinfile:
@@ -41,38 +51,54 @@
       - inventory_hostname is search('os-com')
       - not controller_as_compute|bool
     delegate_to: localhost
+    tags:
+      - always
 
   - name: Include vars from {{compute_ips_list_file}}
     include_vars:
       file: "{{compute_ips_list_file}}"
+    tags:
+      - always
 
   - name: set fact compute_hosts
     set_fact:
       compute_hosts: "{{compute_ips|join(',')}}"
+    tags:
+      - always
 
   - debug:
       var: controller_hosts
     run_once: true
+    tags:
+      - always
 
   - debug:
       var: compute_hosts
     run_once: true
+    tags:
+      - always
 
   - name: Remove {{compute_ips_list_file}}
     file:
       path: "{{compute_ips_list_file}}"
       state: absent
     delegate_to: localhost
+    tags:
+      - always
 
   - assert:
       that:
         - compute_hosts is defined
     when: inventory_hostname is search('os-com') or inventory_hostname is search('os-ctrl')
+    tags:
+      - always
 
   - assert:
       that:
         - controller_hosts is defined
     when: inventory_hostname is search('os-ctrl')
+    tags:
+      - always
 
   roles:
   - role: pre-setup
@@ -82,3 +108,20 @@
   - role: install-openstack
     tags:
       - install-openstack
+
+  - role: post-setup
+    tags:
+      - post-setup
+
+#  - role: haproxy
+#    tags:
+#      - haproxy
+
+#  - role: ssl-cert-mgmt
+#    tags:
+#      - sslcert
+#      - ssl-cert-mgmt
+
+#  - role: ssl-deployment
+#    tags:
+#      - ssl-deployment

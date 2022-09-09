@@ -1,0 +1,26 @@
+---
+
+- include_tasks: pre-setup.yml
+- include_tasks: install.yml
+- include_tasks: config-ssl.yml
+#- include_tasks: proxy-client.yml
+
+#- name: Create dir /etc/pki/haproxy
+#  file:
+#    path: /etc/pki/haproxy
+#    state: directory
+
+#- name: Copy ssl certs
+#  copy:
+#    src: "ssl-certs/{{item}}"
+#    dest: /etc/pki/haproxy/
+#  with_items:
+#    - "server-key.pem"
+#    - "server-cert.pem"
+#    - "ca-cert.pem"
+
+# created using cat server-cert.pem server-key.pem > haproxy.pem
+#- name: copy haproxy.pem
+#  copy:
+#    src: ssl-certs/haproxy.pem
+#    dest: /etc/pki/haproxy/

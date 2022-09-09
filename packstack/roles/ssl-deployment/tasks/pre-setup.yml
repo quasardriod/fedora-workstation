@@ -1,0 +1,5 @@
+---
+- name: Set hostname
+  hostname:
+    name: "{{proxy_host}}"
+    use: systemd

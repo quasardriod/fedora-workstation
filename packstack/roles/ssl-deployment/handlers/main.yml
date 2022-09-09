@@ -1,0 +1,9 @@
+- name: restart_httpd
+  systemd:
+    name: httpd
+    state: restarted
+
+- name: restart_glance
+  systemd:
+    name: openstack-glance-api
+    state: restarted

@@ -1,0 +1,24 @@
+---
+- name: Set fact to copy files in target dir
+  set_fact:
+    openstack_dir: "/tmp/openstack"
+
+- name: Create dir /var/tmp/openstack
+  file:
+    path: "{{openstack_dir}}"
+    state: directory
+
+- name: Copy openstackrc file
+  template:
+    src: openstackrc.j2
+    dest: "{{openstack_dir}}/openstackrc"
+
+- name: Copy dockerfile file
+  template:
+    src: dockerfile.j2
+    dest: "{{openstack_dir}}/Dockerfile"
+
+- name: Build container image
+  shell: podman build -t openstack-image -f Dockerfile
+  args:
+    chdir: "{{openstack_dir}}"

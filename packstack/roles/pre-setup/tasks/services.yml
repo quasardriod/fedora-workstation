@@ -1,6 +1,9 @@
-- name: set hostname
-  hostname:
-    name: "{{inventory_hostname}}"
+- name: Add hostname entry in /etc/hosts
+  lineinfile:
+    path: /etc/hosts
+    regexp: '^{{ansible_host}}'
+    line: '{{ansible_host}} {{inventory_hostname}}.{{domain}} {{inventory_hostname}}'
+    state: present
 
 - name: Install network-scripts package
   dnf:

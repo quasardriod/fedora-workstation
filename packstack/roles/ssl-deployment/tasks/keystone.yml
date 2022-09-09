@@ -1,0 +1,10 @@
+---
+
+- name: Copy keystone config on target host
+  template:
+    src: keystone-ssl.j2
+    dest: /etc/httpd/conf.d/keystone-ssl.conf
+    mode: 0644
+    owner: root
+    group: root
+  notify: restart_httpd

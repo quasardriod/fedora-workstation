@@ -1,0 +1,21 @@
+---
+
+- name: Set hostname of HAproxy host
+  hostname:
+    name: "{{proxy_host}}"
+
+- name: Stop firewalld service
+  systemd:
+    name: firewalld
+    state: stopped
+    enabled: no
+#- include_role:
+#    name: ssl-cert-mgmt
+#  vars:
+#    alt_ip1: "{{haproxy_vip}}"
+#    alt_name1: "{{haproxy_host}}"
+#  when: haproxy_ssl|bool
+
+#- name: Pause for 10 minutes and create certs
+#  pause:
+#    minutes: 10

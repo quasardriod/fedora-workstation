@@ -1,0 +1,36 @@
+---
+
+- name: Install openstack repo
+  dnf:
+    name: "{{openstack_repo}}"
+    state: present
+
+- name: Install openstack client pkgs
+  dnf:
+    name:
+      - python3-openstackclient
+      - net-tools
+      - tcpdump
+      - vim
+    state: present
+
+- name: Copy CA cert
+  copy:
+    src: ssl/ca-cert.pem
+    dest: /root/
+    mode: 0644
+    owner: root
+    group: root
+
+- name: template out openrc
+  template:
+    src: openstackrc-ssl.j2
+    dest: /root/openstackrc
+  when: haproxy_ssl|bool
+
+- name: Add {{proxy_host}} entry in /etc/hosts
+  lineinfile:
+    path: /etc/hosts
+    regexp: '^{{proxy_vip}}'
+    line: '{{proxy_vip}} {{proxy_host}}'
+    state: present

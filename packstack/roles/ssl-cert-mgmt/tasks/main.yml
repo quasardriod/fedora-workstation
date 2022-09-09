@@ -1,0 +1,29 @@
+---
+
+- name: Set fact for a dir to copy files
+  set_fact:
+    cert_dir: "/tmp/{{ lookup('pipe', 'date +%Y%m%d') }}-certs"
+
+- name: Delete Dest dir
+  file:
+    path: "{{cert_dir}}"
+    state: absent
+
+- name: Create dir in /var/tmp
+  file:
+    path: "{{cert_dir}}"
+    state: directory
+
+- name: Copy script on target machine
+  template:
+    src: cert-manager.j2
+    dest: "{{cert_dir}}/cert-manager.sh"
+    mode: 0755
+
+- name: Template out openssl conf
+  template:
+    src: openssl.j2
+    dest: "{{cert_dir}}/openssl.cnf"
+
+- debug:
+    msg: "Script and openssl.cnf has been copied in {{cert_dir}}"

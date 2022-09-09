@@ -1,0 +1,3 @@
+FROM quay.io/centos/centos
+RUN dnf install {{openstack_repo}} -y && dnf install python3-openstackclient -y
+COPY openstackrc /root/

@@ -1,0 +1,29 @@
+---
+
+- name: Enable power tools
+  command: dnf config-manager --enable powertools
+  args:
+    warn: false
+  when: ansible_distribution is match('CentOS')
+
+- name: Install general packages
+  package:
+    name:
+      - vim
+      - dhcp-client
+      - net-tools
+    state: present
+    update_cache: yes
+
+- name: Update OS
+  dnf:
+    name: "*"
+    state: latest
+  when: ansible_distribution is match('CentOS')
+
+
+- name: Install rsyslog
+  dnf:
+    name: rsyslog
+    state: present
+  when: ansible_distribution is match('CentOS')

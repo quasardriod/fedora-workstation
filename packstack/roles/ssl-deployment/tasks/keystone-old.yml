@@ -1,0 +1,52 @@
+- set_fact:
+    run_task: false
+  tags: keystone
+
+- name: keystone | Create https endpoint
+  shell: |
+    source {{rc_file}};
+    if ! openstack endpoint list --interface {{item}}|egrep -q "https://{{ansible_fqdn}}";then
+      openstack endpoint create --region {{region}} \
+        identity {{item}} https://{{ansible_fqdn}}:5000/v3
+    fi
+  with_items: "{{endpoint_type}}"
+  tags: keystone
+  ignore_errors: true
+  when: run_task|bool
+
+- name: keystone | Delete http endpoint
+  shell: |
+    source {{rc_file}};
+    # Get http endpoint id
+    endpoint_id=$(openstack endpoint list --service keystone --interface {{item}}|egrep "http:"|awk '{print $2}')
+    if [ ! -z $endpoint_id ];then
+      openstack endpoint delete $endpoint_id
+    fi
+  with_items: "{{endpoint_type}}"
+  tags: keystone
+
+- name: template out keystone httpd config
+  template:
+    src: keystone-httpd.j2
+    dest: /etc/httpd/conf.d/10-keystone_wsgi_ssl.conf
+    mode: 0644
+    owner: root
+    group: root
+    backup: yes
+  notify: restart_httpd
+  tags: keystone
+#- name: keystone | Create admin endpoint
+#  shell: |
+#    source {{rc_file}}; openstack endpoint create --region {{region}} \
+#      identity {{item}} https://{{ansible_fqdn}}:5000/v3
+#  with_items: "{{endpoint_type}}"
+#  when: item is match('admin')
+#  tags: keystone
+
+#- name: keystone | Create internal endpoint
+#  shell: |
+#    source {{rc_file}}; openstack endpoint create --region {{region}} \
+#      identity {{item}} https://{{ansible_fqdn}}:5000/v3
+#  with_items: "{{endpoint_type}}"
+#  when: item is match('internal')
+#  tags: keystone
